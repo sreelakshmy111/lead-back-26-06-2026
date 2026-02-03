@@ -1,6 +1,7 @@
 package com.project.Permission.of.lead.service.BussinessEnterpriseServiceImpl;
 
 import com.project.Permission.of.lead.dto.BussinessUnitDto;
+import com.project.Permission.of.lead.dto.LeadStatusCustomDto;
 import com.project.Permission.of.lead.entity.Address;
 import com.project.Permission.of.lead.entity.BussinessUnit;
 import com.project.Permission.of.lead.entity.Enterprise;
@@ -9,7 +10,9 @@ import com.project.Permission.of.lead.mapper.BussinessUnitMapper;
 import com.project.Permission.of.lead.repository.AddressRepository;
 import com.project.Permission.of.lead.repository.BussinessUnitRepository;
 import com.project.Permission.of.lead.repository.EnterpriseRepostory;
+import com.project.Permission.of.lead.repository.LeadStatusCustomRepository;
 import com.project.Permission.of.lead.service.BussinessUnitService;
+import com.project.Permission.of.lead.service.LeadStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +38,12 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
     @Autowired
     private AddressRepository addressRepo;
+
+    @Autowired
+    private LeadStatusCustomRepository leadStatusCustomRepository;
+
+    @Autowired
+    private LeadStatusService leadStatusService;
 
 
     ///  CREATE BUSSINESS UNIT..........................................................
@@ -79,6 +88,17 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
         // 5️⃣ Save entity
         BussinessUnit saved = bussinessRepo.save(unit);
+
+        // Call procedure (fire-and-forget)
+        jdbcTemplate.update(
+                "CALL copy_default_lead_stages_proc(?, ?, ?)",
+                eid,
+                buid,
+                loggedInUser.getUser_id()
+        );
+
+//        leadStatusService.leadStatus(eid, buid, new LeadStatusCustomDto(), loggedInUser);
+
 
         // 6️⃣ Map Entity -> DTO
         return BussinessUnitMapper.mapToBussinessEnterpriseDto(saved);

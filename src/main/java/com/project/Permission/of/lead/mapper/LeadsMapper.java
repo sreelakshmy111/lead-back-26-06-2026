@@ -29,7 +29,10 @@ public class LeadsMapper {
                 leadsDto.getCreated_at()!=null? leadsDto.getCreated_at():now,
                 userId,
                 null,
-                leadsDto.getUpdated_by()
+                leadsDto.getUpdated_by(),
+                leadsDto.getLeadStatus(),
+                leadsDto.getNextFollowUp(),
+                leadsDto.getNote()
         );
     }
 
@@ -54,7 +57,10 @@ public class LeadsMapper {
                 leads.getCreatedAt(),
                 leads.getCreated_by(),
                 leads.getUpdated_at(),
-                leads.getUpdated_by()
+                leads.getUpdated_by(),
+                leads.getLeadStatus(),
+                leads.getNextFollowUp(),
+                leads.getNote()
 
         );
     }

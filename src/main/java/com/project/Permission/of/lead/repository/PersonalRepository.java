@@ -53,7 +53,7 @@ public interface PersonalRepository extends JpaRepository<PersonalManagement,Lon
     List<PersonalManagement> findByEidAndBuidAndTerritory(
            @Param("eid") String enterpriseId,
            @Param("buid") String bussinessUnitId,
-           @Param("territoryId") String territoryId);
+           @Param("tid") String territoryId);
 
 
 

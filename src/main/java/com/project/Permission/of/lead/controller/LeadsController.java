@@ -9,6 +9,7 @@ import com.project.Permission.of.lead.service.LeadsService;
 import com.project.Permission.of.lead.service.PersonalManagementService;
 import com.project.Permission.of.lead.service.TeritoryService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -81,6 +82,27 @@ public class LeadsController {
         List<LeadsDto> leads=leadsService.getallLeads(eid,buid,loggedInUser,userPrinciple);
         return ResponseEntity.ok(leads);
         }
+
+
+        /// GET LEADS BY ID..........................................................
+
+
+        @GetMapping("/{eid}/bussinessunits/{buid}/leads/{lid}")
+        public ResponseEntity<?> getLeads(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                          @PathVariable String eid,
+                                          @PathVariable String buid,
+                                          @PathVariable String lid) {
+
+
+            Users loggedInUser=userPrinciple.getUser();
+            if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+                return ResponseEntity.ok("only bussiness admin can get leads..");
+            }
+
+            LeadsDto leads=leadsService.getLeadsByLid(eid,buid,lid,loggedInUser,userPrinciple);
+            return ResponseEntity.ok(leads);
+        }
+
 
 
 
@@ -270,4 +292,65 @@ public class LeadsController {
 //
 //
 //    }
+
+    /// LEADS STAGE UPDATE.............................................................
+
+    @PutMapping("{eid}/bussinessunits/{buid}/leads/{lid}/status")
+    public ResponseEntity<?>updateLedasStage(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                             @PathVariable String eid,
+                                             @PathVariable String buid,
+                                             @PathVariable String lid,
+                                             @RequestBody LeadsDto leadsDto){
+
+        Users loggedInUser=userPrinciple.getUser();
+        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+            return ResponseEntity.ok("only bussiness admin can ipdate lead stages");
+        }
+
+        LeadsDto updatedStage=leadsService.updateLeadStage(eid,buid,lid,loggedInUser,leadsDto);
+        return ResponseEntity.ok(updatedStage);
+    }
+
+
+
+
+// CREATE FOLOOW UP OF LEADS..................................................................
+
+    @PutMapping("/{eid}/bussinessunits/{buid}/leads/{lid}/follow_up")
+    public ResponseEntity<?>createFollowUp(@RequestBody Map<String,Object> requestData,
+                                           @PathVariable String eid,
+                                           @PathVariable String buid,
+                                           @PathVariable String lid,
+                                           @AuthenticationPrincipal UserPrinciple userPrinciple){
+        Users loggedInUser=userPrinciple.getUser();
+
+        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+            return ResponseEntity.ok("only bussiness admin can create follow ups");
+        }
+
+        LeadsDto leadsDto=objectMapper.convertValue(requestData,LeadsDto.class);
+        LeadsDto taskFollowUpDto =leadsService.createFollowUp(eid,buid,lid,leadsDto,loggedInUser);
+        return ResponseEntity.ok(taskFollowUpDto);
+
+    }
+
+
+/// UPDATE LEAD.......................................................................
+
+    @PutMapping("{eid}/bussinessunits/{buid}/leads/{lid}")
+    public ResponseEntity<?>updateLead(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                       @PathVariable String eid,
+                                       @PathVariable String buid,
+                                       @PathVariable String lid,
+                                       @RequestBody LeadsDto leadsDto){
+
+        Users loggedInUser=userPrinciple.getUser();
+
+        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+            return ResponseEntity.ok("only bussiness admin can create follow ups");
+        }
+        LeadsDto leadsDto1=leadsService.updateLead(eid,buid,lid,leadsDto,loggedInUser);
+        return ResponseEntity.ok(leadsDto1);
+    }
+
 }

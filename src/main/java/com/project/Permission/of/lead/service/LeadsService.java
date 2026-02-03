@@ -20,5 +20,13 @@ public interface LeadsService {
 
     Page<LeadsDto> findLeadByGlance(String eid, String buid, int pageNo);
 
+    LeadsDto updateLeadStage(String eid, String buid, String lid, Users loggedInUser, LeadsDto leadsDto);
+
+    LeadsDto createFollowUp(String eid, String buid, String lid, LeadsDto leadsDto, Users loggedInUser);
+
+    LeadsDto getLeadsByLid(String eid, String buid, String lid, Users loggedInUser, UserPrinciple userPrinciple);
+
+    LeadsDto updateLead(String eid, String buid, String lid, LeadsDto leadsDto, Users loggedInUser);
+
 //    List<LeadsDto> getTerritorriesByBuidAndEid(String enterpriseId, String bussinessUnitId, UserPrinciple userPrinciple, Users loggedInUser);
 }

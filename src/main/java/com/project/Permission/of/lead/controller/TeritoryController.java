@@ -9,12 +9,13 @@ import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 //@CrossOrigin(origins = "http://localhost:3000")
-@RestController
-//@RequestMapping("/territories")
+//@RestController
+@RequestMapping("/enterprises")
 
 public class TeritoryController {
 
@@ -24,27 +25,25 @@ public class TeritoryController {
     private boolean hasRole(UserPrinciple userPrinciple,String role){
         return userPrinciple.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_" + role));
     }
-    public ResponseEntity<?> getTerritories(String decodedEid, UserPrinciple userPrinciple, Users loggedInUser) {
 
 
+    @GetMapping("{eid}/bussinessunits/{buid}/territories")
+    public ResponseEntity<?> getTerritories(@AuthenticationPrincipal UserPrinciple userPrinciple,
+                                            @PathVariable String enterpriseId,
+                                            @PathVariable String bussinessUnitId
+
+                                            ) {
+
+
+        Users loggedInUser=userPrinciple.getUser();
         if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
           return ResponseEntity.ok("only bussiness can accesss the territories under eid and uid");
       }
 
-      if(decodedEid.contains("/bussinessunits?buid=") && decodedEid.contains("/territories")){
-          //[EA1000,bussinessunits?buid=BU1000/territories]
-
-          String[] eSplits=decodedEid.split("/bussinessunits\\?buid=");
-          String enterpriseId=eSplits[0].trim();
-          String[] bSplits=eSplits[1].split("/territories");
-          String bussinessUnitId=bSplits[0].trim();
-
-          List<TeritoryDto> terittories=teritoryService.getTerritorriesByBuidAndEid(enterpriseId,bussinessUnitId,userPrinciple,loggedInUser);
+        List<TeritoryDto> terittories=teritoryService.getTerritorriesByBuidAndEid(enterpriseId,bussinessUnitId,userPrinciple,loggedInUser);
           return ResponseEntity.ok(terittories);
       }
-        return  ResponseEntity.ok("error in url for territories get under buid and eid");
 
-    }
 
 //    @Autowired
 //    private TeritoryService teritoryService;

@@ -24,6 +24,7 @@ public interface LeadsRepository extends JpaRepository<Leads, Long> {
 
     Page<Leads> findByEidAndBuid(String eid, String eid1, Pageable pageable);
 
+    Leads findByEidAndBuidAndLid(String eid, String buid, String lid);
 
 
 //    @Query(value = """

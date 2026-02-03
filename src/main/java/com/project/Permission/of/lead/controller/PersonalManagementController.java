@@ -167,42 +167,6 @@ public class PersonalManagementController {
 
 
 
-    ///  assign  territoty to employee................................................................
-
-  @PutMapping("{eid}/employee/{empid}/territories")
-    public ResponseEntity<?> assignTerritories(@RequestBody Map<String, Object> requestBody,
-                                              @PathVariable String eid,
-                                              @PathVariable String empid,
-
-                                              @AuthenticationPrincipal UserPrinciple userPrinciple) {
-        Users loggedUser=userPrinciple.getUser();
-
-        if (!hasRole(userPrinciple, "HR MANAGER")) {
-            return ResponseEntity.ok("only HR MANAGER can assign territories to employees");
-        }
-        //[EA1000/employee?empid=EMP100/territory?tid=TE100]
-
-
-        List<String> territoriesIds = (List<String>) requestBody.get("territories");
-        if (territoriesIds == null || territoriesIds.isEmpty()) {
-            return ResponseEntity.badRequest().body("No territories provided");
-        }
-
-        // 4️⃣ Convert territory IDs to DTOs using your mapper
-        List<PersonalManagementDto> personalManagementDto = territoriesIds.stream()
-                .map(tid -> PearsonalMapper.toDto(empid, eid, tid))
-                .collect(Collectors.toList());
-
-        // 5️⃣ Call service to assign territories
-        List<PersonalManagementDto> assignedTerritories = personalManagementService.assignTerritory(
-                personalManagementDto, loggedUser, eid, empid, territoriesIds);
-
-        // 6️⃣ Return response
-        return ResponseEntity.ok(assignedTerritories);
-
-
-    }
-
 
     //.................Get employyes under territoryyy.................................
 
@@ -231,5 +195,111 @@ public class PersonalManagementController {
 
 
 
+
+    ///  assign  territoty to employee................................................................
+//
+//    @PutMapping("{eid}/employee/{empid}/territories")
+//    public ResponseEntity<?> assignTerritories(@RequestBody Map<String, Object> requestBody,
+//                                               @PathVariable String eid,
+//                                               @PathVariable String empid,
+//
+//                                               @AuthenticationPrincipal UserPrinciple userPrinciple) {
+//        Users loggedUser=userPrinciple.getUser();
+//
+//        if (!hasRole(userPrinciple, "HR MANAGER")) {
+//            return ResponseEntity.ok("only HR MANAGER can assign territories to employees");
+//        }
+//        //[EA1000/employee?empid=EMP100/territory?tid=TE100]
+//
+//
+//        List<String> territoriesIds = (List<String>) requestBody.get("territories");
+//        if (territoriesIds == null || territoriesIds.isEmpty()) {
+//            return ResponseEntity.badRequest().body("No territories provided");
+//        }
+//
+//        // 4️⃣ Convert territory IDs to DTOs using your mapper
+//        List<PersonalManagementDto> personalManagementDto = territoriesIds.stream()
+//                .map(tid -> PearsonalMapper.toDto(empid, eid, tid))
+//                .collect(Collectors.toList());
+//
+//        // 5️⃣ Call service to assign territories
+//        List<PersonalManagementDto> assignedTerritories = personalManagementService.assignTerritory(
+//                personalManagementDto, loggedUser, eid, empid, territoriesIds);
+//
+//        // 6️⃣ Return response
+//        return ResponseEntity.ok(assignedTerritories);
+//
+//
+//    }
+
+    ///  assign  territoty to employee................................................................
+    @PutMapping("{eid}/employee/{empid}/territories")
+    public ResponseEntity<?> assignTerritories(
+            @RequestBody Map<String, Object> requestBody,
+            @PathVariable String eid,
+            @PathVariable String empid,
+            @AuthenticationPrincipal UserPrinciple userPrinciple
+    ) {
+
+        Users loggedUser = userPrinciple.getUser();
+
+        if (!hasRole(userPrinciple, "HR MANAGER")) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("Only HR MANAGER can assign territories to employees");
+        }
+
+        List<String> territoriesIds = (List<String>) requestBody.get("territories");
+
+        if (territoriesIds == null || territoriesIds.isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("No territories provided");
+        }
+
+        try {
+            // Convert territory IDs to DTOs
+            List<PersonalManagementDto> personalManagementDto =
+                    territoriesIds.stream()
+                            .map(tid -> PearsonalMapper.toDto(empid, eid, tid))
+                            .collect(Collectors.toList());
+
+            // Call service
+            List<PersonalManagementDto> assignedTerritories =
+                    personalManagementService.assignTerritory(
+                            personalManagementDto,
+                            loggedUser,
+                            eid,
+                            empid,
+                            territoriesIds
+                    );
+
+            return ResponseEntity.ok(assignedTerritories);
+
+        } catch (RuntimeException ex) {
+
+            // 🔥 THIS is what frontend will read
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT) // 409
+                    .body(ex.getMessage());
+        }
+    }
+
+
+    /// Get employees under territory...................................
+
+    @GetMapping("/{eid}/employees/{empid}/territories")
+    public ResponseEntity<?>getTerritoriesUnderEmployee(@PathVariable String eid,
+                                                        @PathVariable String  empid,
+                                                        @AuthenticationPrincipal UserPrinciple userPrinciple){
+        Users loggedInUser=userPrinciple.getUser();
+
+        if(!hasRole(userPrinciple,"HR MANAGER")){
+            return ResponseEntity.ok("only hr manager can get the assigned territories");
+        }
+
+        List<PersonalManagementDto> territories=personalManagementService.getTerritoriesUnderEmployee(eid,empid,loggedInUser);
+        return ResponseEntity.ok(territories);
+    }
 
 }

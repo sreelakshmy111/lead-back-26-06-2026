@@ -61,20 +61,55 @@ public class UserServiceImpl implements UserService {
 
 private AuthenticationManager authManager;
 
+//
+//public String verify(UserDto userDto) {
+//        Authentication authentication =
+//                authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
+//
+//        if (authentication.isAuthenticated()) {
+//            String username=userDto.getUsername();
+//            return jwtService.generateToken(username);
+//        }
+//        return "fail";
+//
+//
+//}
 
-public String verify(UserDto userDto) {
+
+    public String verify(UserDto userDto) {
+
         Authentication authentication =
-                authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
+                authManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                userDto.getUsername(),
+                                userDto.getPassword()
 
-        if (authentication.isAuthenticated()) {
-            String username=userDto.getUsername();
-            return jwtService.generateToken(username);
+                        )
+                );
+
+        if (!authentication.isAuthenticated()) {
+            throw new RuntimeException("Invalid credentials");
         }
-        return "fail";
 
+        // 1️⃣ Load user from DB
+        Users user = userRepo.findByUsername(userDto.getUsername());
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+//                .orElseThrow(() -> new RuntimeException("User not found"));
 
-}
+        // 2️⃣ Extract ROLE NAME (IMPORTANT)
+        // adjust getter based on your mapping
+        String roleName = user.getUserRoles()
+                .iterator()
+                .next()
+                .getRole()
+                .getRoleName();   // e.g. "BU_ADMIN", "SALES"
 
-
-
+        // 3️⃣ Generate JWT WITH role
+        return jwtService.generateToken(
+                user.getUsername(),
+                roleName
+        );
+    }
 }

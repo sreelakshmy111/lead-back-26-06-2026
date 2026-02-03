@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -133,6 +135,9 @@ public class PersonalManagementImpl implements PersonalManagementService {
 
     }
 
+
+///  assign territories and get ..............................................
+///
     @Override
     public List<PersonalManagementDto> assignTerritory(List<PersonalManagementDto> personalManagementDto, Users loggedUser, String eid, String empid, List<String> territoriesIds) {
         Enterprise enterprise=enterpriseRepostory.findByEid(eid).
@@ -141,15 +146,55 @@ public class PersonalManagementImpl implements PersonalManagementService {
         PersonalManagement personalManagement =personalRepository.findByEmpId(empid).
                 orElseThrow(()->new RuntimeException("Employee not found"));
 
-        List<Teritory> territoryIds=territoryRepoitory.findByTidIn(territoriesIds);
+//        List<Teritory> territoryIds=territoryRepoitory.findByTidIn(territoriesIds);
+//
+//        if (territoryIds.isEmpty()) {
+//            throw new RuntimeException("No valid territories found for the given IDs");
+//        }
+//
+//        personalManagement.setTerritoryId(territoriesIds);
+//        personalRepository.save(personalManagement);
+//        return List.of(PearsonalMapper.maptoPersonalManagementDto(personalManagement));
 
-        if (territoryIds.isEmpty()) {
+        // 1️⃣ Existing territories
+        List<String> existingTerritories = personalManagement.getTerritoryId();
+
+        if (existingTerritories == null) {
+            existingTerritories = List.of();
+        }
+
+        // 2️⃣ Check already assigned territories
+        List<String> alreadyAssigned = territoriesIds.stream()
+                .filter(existingTerritories::contains)
+                .toList();
+
+        if (!alreadyAssigned.isEmpty()) {
+            throw new RuntimeException(
+                    "Territory already assigned: " + alreadyAssigned
+            );
+        }
+
+        // 3️⃣ Validate territory IDs
+        List<Teritory> territoryEntities =
+                territoryRepoitory.findByTidIn(territoriesIds);
+
+        if (territoryEntities.isEmpty()) {
             throw new RuntimeException("No valid territories found for the given IDs");
         }
 
-        personalManagement.setTerritoryId(territoriesIds);
+        // 4️⃣ Merge old + new territories
+        List<String> updatedTerritories =
+                Stream.concat(existingTerritories.stream(), territoriesIds.stream())
+                        .distinct()
+                        .toList();
+
+        personalManagement.setTerritoryId(updatedTerritories);
         personalRepository.save(personalManagement);
-        return List.of(PearsonalMapper.maptoPersonalManagementDto(personalManagement));
+
+        return List.of(
+                PearsonalMapper.maptoPersonalManagementDto(personalManagement)
+        );
+
     }
 
 
@@ -235,8 +280,23 @@ public class PersonalManagementImpl implements PersonalManagementService {
     }
 
 
+    /// Get territories under the employeeeee.....................................................
+
+    @Override
+    public List<PersonalManagementDto> getTerritoriesUnderEmployee(String eid, String empid, Users loggedInUser) {
+        Enterprise enterprise=enterpriseRepostory.findByEid(eid).
+                orElseThrow(()-> new RuntimeException("enterprise not found"));
+
+        // 2️⃣ Get employee personal management
+        PersonalManagement personalManagement = personalRepository.findByEmpId(empid)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        return List.of(
+                PearsonalMapper.maptoPersonalManagementDto(personalManagement)
+        );
 
 
+    }
 
 
 }

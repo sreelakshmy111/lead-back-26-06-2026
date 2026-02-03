@@ -32,6 +32,9 @@ public class LeadsDto {
     private Long created_by;
     private LocalDateTime updated_at;
     private Long updated_by;
+    private Long leadStatus;
+    private LocalDateTime nextFollowUp;
+    private String note;
 
 
 }

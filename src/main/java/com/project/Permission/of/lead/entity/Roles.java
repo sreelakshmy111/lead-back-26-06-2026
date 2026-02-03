@@ -54,19 +54,15 @@ public class Roles {
 //    @OneToMany(mappedBy = "role")
 //    private Set<Users> users; // FIXED: should be Set or List, not single Users
 
-//
+    //
 //    @ManyToMany (fetch = FetchType.EAGER)
 //    @JoinTable(
 //            name = "role_permission",
 //            joinColumns = @JoinColumn(name = "role_id"),
 //            inverseJoinColumns = @JoinColumn(name = "permission_id")
 //    )
-@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-private Set<RolePermission> rolePermissions;
-
-
-
-
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<RolePermission> rolePermissions;
 
 
     public Roles(Long roleId, String roleName, String description, boolean disabled, Boolean isSystemRole, Boolean isSelfService, Integer position, String identifier, Integer legalFormEnum) {
@@ -80,5 +76,8 @@ private Set<RolePermission> rolePermissions;
         this.identifier = identifier;
         this.legalFormEnum = legalFormEnum;
 
+    }
+    public String getRoleName() {
+        return role_name;
     }
 }

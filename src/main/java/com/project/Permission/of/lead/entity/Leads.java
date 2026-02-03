@@ -69,5 +69,11 @@ public class Leads {
 
     private Long updated_by;
 
+    private Long leadStatus;
+
+    @Column(name = "next_follow_up")
+    private LocalDateTime nextFollowUp;
+
+    private String note;
 
 }

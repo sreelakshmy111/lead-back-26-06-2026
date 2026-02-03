@@ -233,7 +233,7 @@ public class PostHierarchyController {
 
         DistrictDto districtDto=objectMapper.convertValue(requestBody,DistrictDto.class);
         DistrictDto saveDistrict=districtService.createDistrict(districtDto,loggedInUser,sid,zid,cid,rid,buid,eid);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(saveDistrict);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveDistrict);
 
 
     }

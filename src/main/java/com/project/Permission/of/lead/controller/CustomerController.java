@@ -106,7 +106,7 @@ public class CustomerController {
 
 
 /// UPDATE CUSTOMER CONTACT...........................................................................
-
+   @PutMapping("{eid}/bussinessunits/{buid}/customer/{cuid}")
     public ResponseEntity<?> updateCustomerContact(@RequestBody Map<String, Object> requestBody,
                                                    @AuthenticationPrincipal UserPrinciple userPrinciple,
                                                    @PathVariable String eid,

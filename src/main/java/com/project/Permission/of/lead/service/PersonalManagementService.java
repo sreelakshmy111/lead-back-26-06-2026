@@ -26,4 +26,6 @@ public interface PersonalManagementService {
 
 
     List<PersonalManagementDto> getEmployeesUnderTerritory(String eid, String buid, String tid, Users loggedInUser);
+
+    List<PersonalManagementDto> getTerritoriesUnderEmployee(String eid, String empid, Users loggedInUser);
 }

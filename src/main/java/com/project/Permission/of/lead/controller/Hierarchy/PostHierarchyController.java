@@ -81,7 +81,7 @@ public class PostHierarchyController {
 
         Users loggedInUser = userPrinciple.getUser(); // get the Users entity from your UserPrinciple
 
-        if (!hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("error-ACESS DENIED -ONLY BUSSINESS ADMIN CAN ACCESS");
 
         EnterpriseDto saved=enterpriseService.createEnterprise(enterpriseDto,loggedInUser);
@@ -97,7 +97,7 @@ public class PostHierarchyController {
 
         Users loggedInUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires ENTERPRISE_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
@@ -119,7 +119,7 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
@@ -144,7 +144,7 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
@@ -169,7 +169,7 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
@@ -197,7 +197,7 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
@@ -226,7 +226,7 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
@@ -256,7 +256,7 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 

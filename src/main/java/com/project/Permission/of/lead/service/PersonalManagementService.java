@@ -1,5 +1,6 @@
 package com.project.Permission.of.lead.service;
 
+import com.project.Permission.of.lead.dto.EmployeeRoleDto;
 import com.project.Permission.of.lead.dto.PersonalManagementDto;
 import com.project.Permission.of.lead.entity.Users;
 
@@ -28,4 +29,15 @@ public interface PersonalManagementService {
     List<PersonalManagementDto> getEmployeesUnderTerritory(String eid, String buid, String tid, Users loggedInUser);
 
     List<PersonalManagementDto> getTerritoriesUnderEmployee(String eid, String empid, Users loggedInUser);
+
+
+//    boolean getEmployeeByLoggedIn(Users loggedInUser);
+
+    boolean getEmployeeByEmail(String email);
+
+    List<PersonalManagementDto> getSearchEmployee(String keyword, String eid, String buid);
+
+    EmployeeRoleDto assignEmployeeRole(String employeeId, List<Long> roleIds, String eid, String buid, String tower);
+
+//    PersonalManagementDto createEmployeeAfterRegister(PersonalManagementDto personalManagementDto, Users loggedInUser);
 }

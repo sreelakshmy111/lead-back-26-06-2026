@@ -16,7 +16,7 @@ public class RolePermissionMapper {
         Set<RolePermission> rolePermissions = new HashSet<>();
 
         for (Permission permission : permissions) {
-            RolePermissionId id = new RolePermissionId(role.getRole_id(), permission.getPermission_id());
+            RolePermissionId id = new RolePermissionId(role.getRoleId(), permission.getPermission_id());
             RolePermission rp = new RolePermission();
             rp.setId(id);
             rp.setRole(role);
@@ -35,7 +35,7 @@ public class RolePermissionMapper {
      permissionIds.add(rolePermission.getPermission().getPermission_id());
 
      return new RolePermissionDto(
-             rolePermission.getRole().getRole_id(),
+             rolePermission.getRole().getRoleId(),
              permissionIds,
              rolePermission.isHasFullAccess()
      );

@@ -8,7 +8,7 @@ import com.project.Permission.of.lead.service.TeritoryService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class TeritoryController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN")){
           return ResponseEntity.ok("only bussiness can accesss the territories under eid and uid");
       }
 

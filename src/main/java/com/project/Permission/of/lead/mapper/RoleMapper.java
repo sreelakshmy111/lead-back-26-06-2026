@@ -7,8 +7,8 @@ public class RoleMapper {
 
     public static Roles mapToRole(RoleDto roleDto) {
         return new Roles(
-                roleDto.getRole_id(),
-                roleDto.getRole_name(),
+                roleDto.getRoleId(),
+                roleDto.getRoleName(),
                 roleDto.getDescription(),
                 roleDto.isDisabled(),
                 roleDto.getIsSystemRole(),
@@ -21,8 +21,8 @@ public class RoleMapper {
 
     public static RoleDto mapToRoleDto(Roles role) {
         return new RoleDto(
-                role.getRole_id(),
-                role.getRole_name(),
+                role.getRoleId(),
+                role.getRoleName(),
                 role.getDescription(),
                 role.isDisabled(),      //maintain same order in entity
                 role.getIsSystemRole(),

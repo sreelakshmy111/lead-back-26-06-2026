@@ -7,6 +7,7 @@ import com.project.Permission.of.lead.controller.PersonalManagementController;
 import com.project.Permission.of.lead.controller.ProcuctCatalogue.ProductCatalogueController;
 import com.project.Permission.of.lead.controller.ProcuctCatalogue.ServiceCatalougeController;
 import com.project.Permission.of.lead.dto.*;
+import com.project.Permission.of.lead.entity.Users;
 import com.project.Permission.of.lead.service.*;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,17 +75,30 @@ public class GetHierachyController {
 //.......get enterprise.................................................
 
     @GetMapping("")
-    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSINESS_ADMIN')")
+    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN')")
     public ResponseEntity<List<EnterpriseDto>> getAllEnterprise(
             @AuthenticationPrincipal UserPrinciple userPrinciple) {
-        List<EnterpriseDto> e = enterpriseService.getAll();
+        Users loggedInUser=userPrinciple.getUser();
+        List<EnterpriseDto> e = enterpriseService.getAll(loggedInUser);
         return ResponseEntity.ok(e);
     }
 
 
-    //............get enterprise by eid..............................................
+
+    /// GET ENTERPRISE BY LOGGED IN USER......................................
+
+    @GetMapping("/check")
+    public ResponseEntity<EnterpriseDto>getEnterpriseByLoggedIn(@AuthenticationPrincipal UserPrinciple userPrinciple
+                                                                ){
+        Users loggedInUser=userPrinciple.getUser();
+        return enterpriseService.checkEnterpriseExist(loggedInUser);
+
+    }
+
+
+    ///............get enterprise by eid.....................................................
     @GetMapping("/{eid}")
-    @PreAuthorize("hasRole('ENTERPRISE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN')")
     public ResponseEntity<EnterpriseDto> getEnterpriseById(@PathVariable String eid,
                                                            @AuthenticationPrincipal UserPrinciple userPrinciple) {
         EnterpriseDto dto = enterpriseService.getenterpriseByEid(eid);
@@ -92,17 +106,34 @@ public class GetHierachyController {
     }
 
 
-//.....get bussinessuits.................................................................
+    /// check enterprise if exists.....................................
+
+//    @GetMapping("/check")
+
+//    public boolean enterpriseCreated(@AuthenticationPrincipal UserPrinciple userPrinciple){
+//
+//        if (!hasRole(userPrinciple, "HR MANAGER")) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("error-ACESS DENIED -ONLY BUSSINESS ADMIN CAN ACCESS").hasBody();
+//        }
+//
+//
+//        Users loggedInUser=userPrinciple.getUser();
+//        return enterpriseService.isEnterpriseCeated(loggedInUser);
+//    }
+
+
+   ///.....get bussinessuits.................................................................
 
     @GetMapping("/{eid}/bussinessunits")
     public ResponseEntity<?> getBusinessUnits(@PathVariable String eid,
                                               @AuthenticationPrincipal UserPrinciple userPrinciple) {
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"ENTERPRISE_ADMIN")  && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("error-ACESS DENIED -ONLY BUSSINESS ADMIN CAN ACCESS");
         }
 
+        Users loggedInUser=userPrinciple.getUser();
 
-        List<BussinessUnitDto> busniess = bussinessUnitService.getBussinessEnterpriseById(eid);
+        List<BussinessUnitDto> busniess = bussinessUnitService.getBussinessEnterpriseById(eid,loggedInUser,userPrinciple);
         return ResponseEntity.ok(busniess);
 
 
@@ -114,7 +145,7 @@ public class GetHierachyController {
     public ResponseEntity<?> getBusinessUnits(@PathVariable String eid,
                                               @PathVariable String buid,
                                               @AuthenticationPrincipal UserPrinciple userPrinciple) {
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED :only BUSSINESS ADMIN CAN GET"), HttpStatus.FORBIDDEN);
         }
 
@@ -130,7 +161,7 @@ public class GetHierachyController {
                                        @PathVariable String buid,
                                        @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-          if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+          if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") ) {
               return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
           }
 
@@ -148,7 +179,7 @@ public class GetHierachyController {
                                        @PathVariable String rid,
                                        @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -166,7 +197,7 @@ public class GetHierachyController {
                                             @PathVariable String rid,
                                             @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -185,7 +216,7 @@ public class GetHierachyController {
                                          @PathVariable String cid,
                                          @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -203,7 +234,7 @@ public class GetHierachyController {
                                              @PathVariable String cid,
                                              @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -223,7 +254,7 @@ public class GetHierachyController {
                                      @PathVariable String zid,
                                      @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -242,7 +273,7 @@ public class GetHierachyController {
                                          @PathVariable String zid,
                                          @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -265,7 +296,7 @@ public class GetHierachyController {
                                       @PathVariable String sid,
                                       @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -274,7 +305,9 @@ public class GetHierachyController {
         return ResponseEntity.status(HttpStatus.OK).body(stateDtos);
 
     }
-        // GET districts....................................................................
+
+
+    // GET districts....................................................................
 
 
         @GetMapping("/{eid}/bussinessunits/{buid}/regions/{rid}/countries/{cid}/zones/{zid}/states/{sid}/districts")
@@ -286,7 +319,7 @@ public class GetHierachyController {
                 @PathVariable String sid,
                 @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-            if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+            if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
                 return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
             }
 
@@ -311,7 +344,7 @@ public class GetHierachyController {
                                          @PathVariable String did,
                                          @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -336,7 +369,7 @@ public class GetHierachyController {
                                              @PathVariable String did,
                                              @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 
@@ -362,7 +395,7 @@ public class GetHierachyController {
                                            @PathVariable String tid,
                                            @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
             return new ResponseEntity<>(Map.of("error", "ACCESS DENIED:only bussiness_admin can get"), HttpStatus.FORBIDDEN);
         }
 

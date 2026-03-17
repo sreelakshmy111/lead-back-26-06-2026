@@ -24,13 +24,16 @@ public class Users {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
      private Long user_id;
 
-   @Column(nullable = false,length = 255)
+   @Column(name = "uid")
+   private String uid;
+
+   @Column(length = 255)
     private String username;
 
-   @Column(nullable = false,length = 255)
+   @Column(length = 255)
     private String password;
 
-   @Column(unique = true,nullable = false,length = 255)
+   @Column(unique = true,length = 255)
     private String email;
 
 
@@ -43,16 +46,15 @@ public class Users {
     private Long addressId;
 
 
-    public Users(Long user_id, String username, String password, String email,Long addressId) {
+
+
+    public Users(Long user_id, String username, String password, String email, String userDtoEmail, Long addressId) {
         this.user_id = user_id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.addressId=addressId;
     }
-
-
-
 
 
 }

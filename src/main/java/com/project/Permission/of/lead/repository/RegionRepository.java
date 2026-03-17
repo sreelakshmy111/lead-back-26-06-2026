@@ -25,6 +25,10 @@ public interface RegionRepository extends JpaRepository<Region,Long> {
     );
 
     Optional<Region> findByRid(String regionId);
+
+    List<Region> findByCreatedBy(Long userId);
+
+    boolean existsByBussinessUnitId(String buid);
 //    Region findByEnterpriseBussinessUnit(Enterprise enterprise, BussinessUnit bussinessUnit);
 
 

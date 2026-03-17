@@ -38,7 +38,7 @@ public class UserRole implements Serializable {
     public UserRole(Users user, Roles role) {
         this.user = user;
         this.role = role;
-        this.id = new UserRoleId(user.getUser_id(), role.getRole_id());
+        this.id = new UserRoleId(user.getUser_id(), role.getRoleId());
     }
 
     // Getters and Setters

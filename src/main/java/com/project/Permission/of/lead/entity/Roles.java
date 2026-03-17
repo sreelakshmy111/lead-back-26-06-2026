@@ -19,14 +19,15 @@ import java.util.Set;
 public class Roles {
 
     @Id
-    @Column()
+
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long role_id;
+    @Column(name = "role_id")
+    private Long roleId;
 
 
-    @Column(unique = true, nullable = false)
-    private String role_name;
+    @Column(unique = true, nullable = false,name = "role_name")
+    private String roleName;
 
 
     @Column(name = "description", nullable = false, length = 500)
@@ -66,8 +67,8 @@ public class Roles {
 
 
     public Roles(Long roleId, String roleName, String description, boolean disabled, Boolean isSystemRole, Boolean isSelfService, Integer position, String identifier, Integer legalFormEnum) {
-        this.role_id = roleId;
-        this.role_name = roleName;
+        this.roleId = roleId;
+        this.roleName = roleName;
         this.description = description;
         this.isDisabled = disabled;
         this.isSystemRole = isSystemRole;
@@ -78,6 +79,6 @@ public class Roles {
 
     }
     public String getRoleName() {
-        return role_name;
+        return roleName;
     }
 }

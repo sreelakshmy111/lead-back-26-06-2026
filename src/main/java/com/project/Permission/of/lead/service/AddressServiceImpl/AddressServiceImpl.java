@@ -52,6 +52,12 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private EmployeeDraftRepository employeeDraftRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Override
     public AddressDto createAddress(AddressDto addressDto) {
@@ -101,6 +107,19 @@ public class AddressServiceImpl implements AddressService {
 
                 return "Address linked to Employee Sucessfully";
 
+            case "EmployeeDraft":
+                Long empDraftId = Long.parseLong(entityId);
+                EmployeeDraft employeeDraft =employeeDraftRepository.findById(empDraftId).
+                        orElseThrow(()-> new RuntimeException("Personal Details not found"));
+
+                employeeDraft.setAddressId(addressId);
+                Users user=userRepository.findById(employeeDraft.getCreatedBy()).
+                        orElseThrow(()-> new RuntimeException("user not found"));
+                user.setAddressId(addressId);
+                employeeDraftRepository.save(employeeDraft);
+
+                return "Address linked to Employee Sucessfully";
+
             case "Customer":
                 Customer customer = customerRepository.findByCustId(entityId)
                         .orElseThrow(() -> new RuntimeException("Customer not found"));
@@ -118,6 +137,7 @@ public class AddressServiceImpl implements AddressService {
         }
 
     }
+
 
     @Override
     public AddressDto updateAddress(Long addressId, AddressDto addressDto) {

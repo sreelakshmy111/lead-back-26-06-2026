@@ -8,11 +8,9 @@ import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import java.util.Collection;
 import java.util.List;
 
 //@RestController
@@ -59,12 +57,12 @@ public class EnterpriseController {
 
     }
 
-    @GetMapping("enterprises")
-    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSINESS_ADMIN')")
-    public ResponseEntity<List<EnterpriseDto>> getAllEnterprise(){
-        List<EnterpriseDto> e=enterpriseService.getAll();
-        return ResponseEntity.ok(e);
-    }
+//    @GetMapping("enterprises")
+//    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSINESS_ADMIN')")
+//    public ResponseEntity<List<EnterpriseDto>> getAllEnterprise(){
+//        List<EnterpriseDto> e=enterpriseService.getAll(loggedInUser);
+//        return ResponseEntity.ok(e);
+//    }
 //
 //
 //    Get enterprises...................................................................................

@@ -40,7 +40,7 @@ public class TaskFollowUpController {
                                          @PathVariable String lid){
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can get foloow ups");
         }
 

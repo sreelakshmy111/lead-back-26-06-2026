@@ -44,6 +44,7 @@ public class Mcode {
 
     @OneToMany(mappedBy = "code", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("code") // Prevents infinite loop when serializing a master
+    @OrderBy("orderPosition ASC")
     private List<McodeValue> codeValues; // <-- NEW: Collection of children Mcode objects
 
 

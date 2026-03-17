@@ -75,7 +75,7 @@ public class CustomerController {
 
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN")){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only bussiness admin can create customers!");
         }
 
@@ -95,7 +95,7 @@ public class CustomerController {
 
          Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER")){
             return ResponseEntity.ok("Only bussiness admin can get customers!");
         }
 
@@ -114,7 +114,7 @@ public class CustomerController {
                                                    @PathVariable String cuid) {
 
     Users loggedUser=userPrinciple.getUser();
-    if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+    if(!hasRole(userPrinciple,"BUSSINESS_ADMIN")){
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "ONLY BUSINESS ADMIN CAN PERFORM THIS ACTION");
     }
 

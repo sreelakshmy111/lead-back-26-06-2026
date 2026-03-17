@@ -87,4 +87,6 @@ public class BussinessUnit {
         this.enterpriseId = enterpriseId;
         this.buid = buid;
     }
+
+
 }

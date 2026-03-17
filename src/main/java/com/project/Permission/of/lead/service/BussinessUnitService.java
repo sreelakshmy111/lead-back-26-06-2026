@@ -2,6 +2,7 @@ package com.project.Permission.of.lead.service;
 
 import com.project.Permission.of.lead.dto.BussinessUnitDto;
 import com.project.Permission.of.lead.entity.Users;
+import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface BussinessUnitService {
 
 //    List<BussinessUnitDto> getB();
 
-    List<BussinessUnitDto> getBussinessEnterpriseById(String eid);
+    List<BussinessUnitDto> getBussinessEnterpriseById(String eid, Users loggedInUser, UserPrinciple userPrinciple);
 
     BussinessUnitDto createBussinessUnit(String eid, BussinessUnitDto bussinessUnitDto, Users currentUser);
 

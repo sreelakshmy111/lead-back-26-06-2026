@@ -9,10 +9,13 @@ public class UserMapper {
 
         return new UserDto(
                users.getUser_id(),
+                users.getUid(),
                users.getUsername(),
                users.getPassword(),
                 users.getEmail(),
                 users.getAddressId()
+
+
 
 //                users.getRole() != null ? users.getRole().getId() : null,  // roleId
 //                users.getRoleName()
@@ -25,10 +28,12 @@ public class UserMapper {
 
         return new Users(
                 userDto.getUser_id(),
+                userDto.getUid(),
                 userDto.getUsername(),
                 userDto.getPassword(),
                 userDto.getEmail(),
                 userDto.getAddressId()!=null? userDto.getAddressId():null
+
 
         );
     }

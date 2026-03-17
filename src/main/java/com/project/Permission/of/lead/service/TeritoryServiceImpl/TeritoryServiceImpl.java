@@ -53,7 +53,7 @@ public class TeritoryServiceImpl implements TeritoryService {
 
 
     @Override
-    @PreAuthorize("hasRole('BUSINESS_ADMIN')")
+    @PreAuthorize("hasRole('BUSSINESS_ADMIN')")
     public TeritoryDto createTeritory(TeritoryDto teritoryDto, Users loggedInUser, String did, String sid, String zid, String cid, String rid, String buid, String eid) {
 
         Enterprise enterprise=enterpriseRepo.findByEid(eid).

@@ -41,8 +41,8 @@ public class ServiceCatalougeController {
             @PathVariable String buid,
             @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") &&
-                !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&
+                !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -62,7 +62,7 @@ public class ServiceCatalougeController {
                                                  @AuthenticationPrincipal  UserPrinciple userPrinciple) {
 
         Users loggedInUser =userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY HR MANAGER CAN CREATE PRODUCT");
         }
 
@@ -83,7 +83,7 @@ public class ServiceCatalougeController {
 
         Users loggedInUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY BUSSINESS ADMIN CAN CREATE SERVICE TYPE");
         }
 
@@ -106,7 +106,7 @@ public class ServiceCatalougeController {
                                                @AuthenticationPrincipal  UserPrinciple userPrinciple) {
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY BUSSINESS ADMIN CAN CREATE SERVICE TYPE");
         }
 
@@ -126,7 +126,7 @@ public class ServiceCatalougeController {
 
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("ONLY BUSINESS ADMIN CAN GET SERVICE TYPE");
         }
 
@@ -145,7 +145,7 @@ public class ServiceCatalougeController {
 
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("ONLY BUSINESS ADMIN CAN GET SERVICE TYPE");
         }
 
@@ -167,7 +167,7 @@ public class ServiceCatalougeController {
 
         Users loggedInUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("ONLY BUSINESS ADMIN CAN GET SERVICE TYPE");
         }
 

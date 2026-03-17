@@ -1,18 +1,26 @@
 package com.project.Permission.of.lead.service.PersonalManagementImpl;
 
+import com.project.Permission.of.lead.dto.EmployeeRoleDto;
 import com.project.Permission.of.lead.dto.PersonalManagementDto;
 import com.project.Permission.of.lead.entity.*;
 import com.project.Permission.of.lead.mapper.PearsonalMapper;
 import com.project.Permission.of.lead.repository.*;
+import com.project.Permission.of.lead.service.EmailServiceImpl.EmailServiceImpl;
 import com.project.Permission.of.lead.service.PersonalManagementService;
+import com.project.Permission.of.lead.util.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,8 +46,29 @@ public class PersonalManagementImpl implements PersonalManagementService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailServiceImpl emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRolerepository userRolerepository;
+
     @Override
     public PersonalManagementDto createEmployee(PersonalManagementDto personalManagementDto, Users loggedInUser, String eid) {
+
+        String email=personalManagementDto.getEmail();
+
+        boolean exist=personalRepository.existsByEmail(email);
+        if(exist){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"Email already exists");
+        }
+
+
 
         String emp_id=jdbcTemplate.queryForObject(
                 "SELECT create_entity_id(?)",
@@ -55,6 +84,11 @@ public class PersonalManagementImpl implements PersonalManagementService {
         personalManagement.setActive(true);
         personalManagement.setEmpId(emp_id);
         PersonalManagement savedEmployee=personalRepository.save(personalManagement);
+
+//        String pw=PasswordGenerator.generatePassword();
+//        emailService.sendPasswordEmail(savedEmployee.getEmail(),pw);
+
+
         return PearsonalMapper.maptoPersonalManagementDto(savedEmployee);
     }
 
@@ -84,7 +118,9 @@ public class PersonalManagementImpl implements PersonalManagementService {
         PersonalManagement person=personalRepository.findByEmpId(empid).
                 orElseThrow(()->new RuntimeException("Employee not found"));
 
-        person.setName(personalDto.getName());
+        person.setFirstName(personalDto.getFirstName());
+        person.setMiddleName(person.getMiddleName());
+        person.setLastName(person.getLastName());
         person.setGender(personalDto.getGender());
         person.setDob(personalDto.getDob());
         person.setIsdCode(personalDto.getIsdCode());
@@ -298,5 +334,135 @@ public class PersonalManagementImpl implements PersonalManagementService {
 
     }
 
+    @Override
+    public boolean getEmployeeByEmail(String email) {
+
+        boolean emp=personalRepository.existsByEmail(email);
+       return emp;
+     }
+
+     ///  SERACH EMPLOYEESSS...................................................
+
+
+    @Override
+    public List<PersonalManagementDto> getSearchEmployee(String keyword, String eid, String buid) {
+
+
+        List<PersonalManagement> employee=personalRepository.searchEmployeeByEnterpriseAndBussinessUnit(keyword,eid,buid);
+
+        return employee.stream().map(a->PearsonalMapper.maptoPersonalManagementDto(a)).collect(Collectors.toList());
+
+
+
+    }
+
+
+
+
+    /// GET EMPLOYEEE AFTER REGISTER,CHECK DOES IT EXIST
+//    @Override
+//    public boolean getEmployeeByLoggedIn(PersonalManagementDto dto) {
+//        String email=
+//       boolean emp=personalRepository.existsByEmail(loggedInUser.getEmail());
+//       return emp;
+//    }
+
+
+
+
+    // cloudflare function.............................................
+
+    private void regitserToCloud(String email,String tower){
+
+        RestTemplate restTemplate=new RestTemplate();
+
+        HttpHeaders headers=new HttpHeaders();
+        headers.setBasicAuth("admin","password");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String,String> body=new HashMap<>();
+        body.put("userID",email);
+        body.put("tower",tower);
+
+        HttpEntity<Map<String, String>> request =
+                new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    "https://new.sudmun.workers.dev/user",
+                    request,
+                    String.class
+            );
+
+            System.out.println("Worker response: " + response.getStatusCode());
+
+        } catch (Exception e) {
+            System.out.println("Error calling Worker: " + e.getMessage());
+        }
+
+    }
+
+
+
+
+
+    ///  ASSIGN EMPLOYEE A ROLE.................................................
+
+    @Override
+    public EmployeeRoleDto assignEmployeeRole(String employeeId, List<Long> roleIds, String eid, String buid, String tower) {
+
+        PersonalManagement p=personalRepository.findByEmpId(employeeId).
+                orElseThrow(()-> new RuntimeException("employee not found"));
+
+        Users user = userRepository.findByEmail(p.getEmail());
+
+        if(user == null){
+
+            String pw = PasswordGenerator.generatePassword();
+
+            System.out.println("password generated"+pw);
+
+
+            String usr_id=jdbcTemplate.queryForObject(
+                    "SELECT create_entity_id(?)",
+                    new Object[]{"USER"},
+                    String.class
+            );
+
+            user = new Users();
+            user.setEmail(p.getEmail());
+            user.setPassword(passwordEncoder.encode(pw));
+            user.setUid(usr_id);
+
+            user = userRepository.save(user);
+
+            System.out.println("Sending email to: " + user.getEmail());
+
+            emailService.sendPasswordEmail(user.getEmail(), pw);
+        }
+
+
+        for(Long roleId : roleIds){
+
+            Roles role = roleRepository.findById(roleId)
+                    .orElseThrow(() -> new RuntimeException("Role not found"));
+
+            UserRole ur = new UserRole(user, role);
+            userRolerepository.save(ur);
+        }
+
+
+
+        regitserToCloud(user.getEmail(),tower);
+
+
+        EmployeeRoleDto dto = new EmployeeRoleDto();
+        dto.setEmployeeId(employeeId);
+        dto.setRoleId(roleIds);
+
+        return dto;
+
+
+    }
 
 }

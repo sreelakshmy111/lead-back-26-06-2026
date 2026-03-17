@@ -1,25 +1,19 @@
 package com.project.Permission.of.lead.service.BussinessEnterpriseServiceImpl;
 
 import com.project.Permission.of.lead.dto.BussinessUnitDto;
-import com.project.Permission.of.lead.dto.LeadStatusCustomDto;
-import com.project.Permission.of.lead.entity.Address;
-import com.project.Permission.of.lead.entity.BussinessUnit;
-import com.project.Permission.of.lead.entity.Enterprise;
-import com.project.Permission.of.lead.entity.Users;
+import com.project.Permission.of.lead.entity.*;
 import com.project.Permission.of.lead.mapper.BussinessUnitMapper;
-import com.project.Permission.of.lead.repository.AddressRepository;
-import com.project.Permission.of.lead.repository.BussinessUnitRepository;
-import com.project.Permission.of.lead.repository.EnterpriseRepostory;
-import com.project.Permission.of.lead.repository.LeadStatusCustomRepository;
+import com.project.Permission.of.lead.repository.*;
 import com.project.Permission.of.lead.service.BussinessUnitService;
 import com.project.Permission.of.lead.service.LeadStatusService;
+import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +38,9 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
     @Autowired
     private LeadStatusService leadStatusService;
+
+    @Autowired
+    private PersonalRepository personalRepository;
 
 
     ///  CREATE BUSSINESS UNIT..........................................................
@@ -78,7 +75,7 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
 
         // 3️⃣ Map DTO -> Entity using current user
-        BussinessUnit unit = BussinessUnitMapper.mapToBussinessEnterprise(bussinessUnitDto, loggedInUser.getUser_id(),null);
+        BussinessUnit unit = BussinessUnitMapper.mapToBussinessEnterprise(bussinessUnitDto, loggedInUser.getUid(),null);
 
         // 4️⃣ Link Enterprise ID
 
@@ -94,7 +91,7 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
                 "CALL copy_default_lead_stages_proc(?, ?, ?)",
                 eid,
                 buid,
-                loggedInUser.getUser_id()
+                loggedInUser.getUid()
         );
 
 //        leadStatusService.leadStatus(eid, buid, new LeadStatusCustomDto(), loggedInUser);
@@ -261,19 +258,74 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 // GET Bussinesunits.......................................................................
 
     @Override
-    public List<BussinessUnitDto> getBussinessEnterpriseById(String eid) {
+    public List<BussinessUnitDto> getBussinessEnterpriseById(String eid, Users loggedInUser, UserPrinciple userPrinciple) {
 
         Enterprise enterprise=enterpriseRepo.findByEid(eid).
                 orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
 
 
+        String role= userPrinciple.getRole();
 
-        List<BussinessUnit> bussinessUnits=bussinessRepo.findByEnterpriseId(eid);
-        List<BussinessUnitDto> bussinessUnitDtos=bussinessUnits.stream().map(bu->BussinessUnitMapper.mapToBussinessEnterpriseDto(bu)).collect(Collectors.toList());
+        if(role.equals("ENTERPRISE_ADMIN")){
+            List<BussinessUnit> bussinessUnits =
+                    bussinessRepo.findByEnterpriseId(eid);
 
-        return bussinessUnitDtos;
+            return bussinessUnits.stream()
+                    .map(BussinessUnitMapper::mapToBussinessEnterpriseDto)
+                    .toList();
+        }
 
+        if(role.equals("BUSSINESS_ADMIN")){
+
+            String email= loggedInUser.getEmail();
+
+            PersonalManagement employee= personalRepository.findByEmail(email).
+                    orElseThrow(()-> new RuntimeException("Employee not found for logged in user"));
+
+
+            String buid=employee.getBuid();
+
+            BussinessUnit bu = bussinessRepo.findByBuid(buid)
+                    .orElseThrow(() -> new RuntimeException("Business Unit not found"));
+
+            return List.of(BussinessUnitMapper.mapToBussinessEnterpriseDto(bu));
+        }
+
+
+     return Collections.emptyList();
     }
+
+
+
+//        String role = userPrinciple.getRole();
+//
+//        // 2️⃣ ENTERPRISE ADMIN → return all business units
+//        if(role.equals("ENTERPRISE_ADMIN")) {
+//
+//            List<BussinessUnit> bussinessUnits =
+//                    bussinessRepo.findByEnterpriseId(eid);
+//
+//            return bussinessUnits.stream()
+//                    .map(BussinessUnitMapper::mapToBussinessEnterpriseDto)
+//                    .toList();
+//        }
+//
+//
+//        // BUSINESS ADMIN → return only the business units created by them
+//        if (role.equals("BUSSINESS_ADMIN")) {
+//
+//            List<BussinessUnit> bussinessUnits =
+//                    bussinessRepo.findByCreatedBy(loggedInUser.getUser_id());
+//
+//            return bussinessUnits.stream()
+//                    .map(BussinessUnitMapper::mapToBussinessEnterpriseDto)
+//                    .toList();
+//        }
+//
+//        return List.of(); // fallback
+
+
+
 
     @Override
     public BussinessUnitDto getBussinessByIdEnterpriseById(String eid, String buid) {

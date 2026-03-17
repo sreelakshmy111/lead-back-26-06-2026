@@ -2,13 +2,12 @@ package com.project.Permission.of.lead.mapper;
 
 import com.project.Permission.of.lead.dto.BussinessUnitDto;
 import com.project.Permission.of.lead.entity.BussinessUnit;
-import com.project.Permission.of.lead.entity.Users;
 
 import java.time.LocalDateTime;
 
 public class BussinessUnitMapper {
 
-    public static BussinessUnit mapToBussinessEnterprise(BussinessUnitDto bussinessUnitDto, Long createdBy, Long updatedBy) {
+    public static BussinessUnit mapToBussinessEnterprise(BussinessUnitDto bussinessUnitDto, String createdBy, Long updatedBy) {
         LocalDateTime now = LocalDateTime.now();
 
         return new BussinessUnit(

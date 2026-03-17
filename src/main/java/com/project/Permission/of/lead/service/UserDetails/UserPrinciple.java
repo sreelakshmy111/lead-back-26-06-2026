@@ -27,7 +27,7 @@ public class UserPrinciple implements UserDetails {
 
         // Add roles as authorities (with ROLE_ prefix)
         List<GrantedAuthority> roles = user1.getUserRoles().stream()
-                .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.getRole().getRole_name()))
+                .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.getRole().getRoleName()))
                 .collect(Collectors.toList());
 
         // Optionally, add permissions too
@@ -64,7 +64,7 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user1.getUsername();
+        return user1.getEmail();
     }
 
     @Override
@@ -84,6 +84,16 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+
         return true;
+    }
+
+    public String getRole() {
+
+        return user1.getUserRoles()
+                .stream()
+                .findFirst()
+                .map((userRole -> userRole.getRole().getRoleName()))
+                .orElse(null);
     }
 }

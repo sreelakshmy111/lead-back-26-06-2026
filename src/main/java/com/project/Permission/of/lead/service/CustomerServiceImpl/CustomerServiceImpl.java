@@ -13,8 +13,10 @@ import com.project.Permission.of.lead.service.CustomerService;
 import jakarta.transaction.Transactional;
 import org.hibernate.Internal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,6 +48,15 @@ public class CustomerServiceImpl implements CustomerService {
 
         BussinessUnit bussinessUnit=bussinessUnitRepository.findByBuid(buid).
                 orElseThrow(()->new RuntimeException("BussinessUnit not found"));
+
+        String email=customerDto.getEmail();
+
+        boolean exist=customerRepository.existsByEmail(email);
+
+        if(exist){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"Email already exists");
+        }
+
 
         String CustomerId=jdbcTemplate.queryForObject("SELECT create_entity_id(?)",
                                               new Object[]{"CUSTOMER_CONTACT"},

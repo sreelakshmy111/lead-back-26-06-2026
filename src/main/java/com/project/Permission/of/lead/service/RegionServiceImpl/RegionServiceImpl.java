@@ -38,7 +38,7 @@ public class RegionServiceImpl implements RegionService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    @PreAuthorize("hasRole('BUSINESS_ADMIN')")
+    @PreAuthorize("hasRole('BUSSINESS_ADMIN')")
     public RegionDto createRegions(RegionDto regionDto,String eid, String buid, Users loggedInUser) {
 
       Enterprise enterprise= enterpriseRepo.findByEid(eid)

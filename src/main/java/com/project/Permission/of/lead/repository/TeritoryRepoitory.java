@@ -42,5 +42,7 @@ public interface TeritoryRepoitory extends CrudRepository<Teritory,Long> {
 
     List<Teritory> findByBussinessUnitId(String bussinessUnitId);
 
+    boolean existsByBussinessUnitId(String buid);
+
 //    Optional<Teritory> findByTid(String territoryId);
 }

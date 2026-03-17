@@ -12,8 +12,11 @@ public class PearsonalMapper {
         LocalDateTime now=LocalDateTime.now();
         return new PersonalManagement(
                 personalDto.getId(),
+
+                personalDto.getFirstName(),
+                personalDto.getMiddleName(),
+                personalDto.getLastName(),
                 personalDto.getEmpId(),
-                personalDto.getName(),
                 personalDto.getGender(),
                 personalDto.getDob(),
                 personalDto.getIsdCode(),
@@ -40,8 +43,11 @@ public class PearsonalMapper {
     public static PersonalManagementDto maptoPersonalManagementDto( PersonalManagement personal) {
         return new PersonalManagementDto(
                 personal.getId(),
+
+                personal.getFirstName(),
+                personal.getMiddleName(),
+                personal.getLastName(),
                 personal.getEmpId(),
-                personal.getName(),
                 personal.getGender(),
                 personal.getDob(),
                 personal.getIsdCode(),

@@ -61,5 +61,23 @@ public interface PersonalRepository extends JpaRepository<PersonalManagement,Lon
 List<PersonalManagement> findByAssignedTerritory(@Param("tid") String tid,
                                                  @Param("buid")String buid);
 
+    boolean existsByEmail(String email);
+
+    Optional<PersonalManagement> findByEmail(String email);
+
+
+    @Query("""
+SELECT e From PersonalManagement e
+WHERE e.eid = :eid
+AND
+e.buid = :buid
+AND
+ (LOWER(CONCAT(e.firstName,'',COALESCE(e.middleName,''),'',e.lastName)) 
+LIKE LOWER(CONCAT('%',:keyword,'%'))
+OR LOWER(e.email) LIKE(CONCAT('%',:keyword,'%')))
+""")
+    List<PersonalManagement> searchEmployeeByEnterpriseAndBussinessUnit(@Param("keyword") String keyword, @Param("eid") String eid,@Param("buid") String buid);
+
+
 //    List<PersonalManagement> findByEidAndBuidAndTerritory(String enterpriseId, String bussinessUnitId, String territoryId);
 }

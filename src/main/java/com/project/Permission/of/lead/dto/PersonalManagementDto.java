@@ -16,8 +16,11 @@ import java.util.List;
 public class PersonalManagementDto {
 
     private Long id;
+
+    private String firstName;
+    private String middleName;
+    private String lastName;
     private String empId;
-    private String name;
     private String gender;
     private LocalDate dob;
     private String isdCode;

@@ -52,7 +52,7 @@ public class LeadsController {
                                         @PathVariable String buid) {
 
         Users loggedInUser=userPrinciple.getUser();
-    if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+    if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
         return ResponseEntity.ok("access denied ,only bussiness admin can create leads..");
     }
 
@@ -75,7 +75,7 @@ public class LeadsController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can get leads..");
         }
 
@@ -95,7 +95,7 @@ public class LeadsController {
 
 
             Users loggedInUser=userPrinciple.getUser();
-            if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+            if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
                 return ResponseEntity.ok("only bussiness admin can get leads..");
             }
 
@@ -157,7 +157,7 @@ public class LeadsController {
                                             @PathVariable String lid) {
 
         Users loggedUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can get leads..");
         }
 
@@ -179,7 +179,7 @@ public class LeadsController {
                                             @PathVariable String buid) {
 
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSNESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can get leads..");
         }
 
@@ -200,7 +200,7 @@ public class LeadsController {
 
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can get leads..");
         }
 
@@ -219,7 +219,7 @@ public class LeadsController {
                                                       @PathVariable String tid,
                                                       @AuthenticationPrincipal UserPrinciple userPrinciple){
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can access the employyes under territoty");
         }
 
@@ -242,7 +242,7 @@ public class LeadsController {
                                                  ){
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("error only bussiness_admin can do this");
         }
         LeadsDto leadsDto=objectMapper.convertValue(requestBody,LeadsDto.class);
@@ -259,7 +259,7 @@ public class LeadsController {
                                         @RequestParam(defaultValue = "0") int pageNo,
                                         @AuthenticationPrincipal UserPrinciple userPrinciple){
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("only bussienss admin can access the leads at glance");
         }
 
@@ -303,7 +303,7 @@ public class LeadsController {
                                              @RequestBody LeadsDto leadsDto){
 
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can ipdate lead stages");
         }
 
@@ -324,7 +324,7 @@ public class LeadsController {
                                            @AuthenticationPrincipal UserPrinciple userPrinciple){
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can create follow ups");
         }
 
@@ -346,7 +346,7 @@ public class LeadsController {
 
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can create follow ups");
         }
         LeadsDto leadsDto1=leadsService.updateLead(eid,buid,lid,leadsDto,loggedInUser);

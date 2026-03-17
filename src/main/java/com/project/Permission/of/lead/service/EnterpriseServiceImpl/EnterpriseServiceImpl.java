@@ -1,25 +1,28 @@
 package com.project.Permission.of.lead.service.EnterpriseServiceImpl;
 
+import com.project.Permission.of.lead.dto.CheckUpDto;
 import com.project.Permission.of.lead.dto.EnterpriseDto;
-import com.project.Permission.of.lead.entity.Address;
+import com.project.Permission.of.lead.entity.BussinessUnit;
 import com.project.Permission.of.lead.entity.Enterprise;
+import com.project.Permission.of.lead.entity.PersonalManagement;
 import com.project.Permission.of.lead.entity.Users;
 import com.project.Permission.of.lead.mapper.EnterpriseMapper;
-import com.project.Permission.of.lead.repository.AddressRepository;
-import com.project.Permission.of.lead.repository.EnterpriseRepostory;
-import com.project.Permission.of.lead.repository.UserRepository;
+import com.project.Permission.of.lead.repository.*;
+import com.project.Permission.of.lead.service.EmployeeDraftService;
 import com.project.Permission.of.lead.service.EnterpriseService;
+import com.project.Permission.of.lead.service.PersonalManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.project.Permission.of.lead.mapper.EnterpriseMapper.mapToEnterpriseDto;
 
 @Service
 @Transactional
@@ -35,7 +38,25 @@ private UserRepository userRepo;
 private AddressRepository addressRepo;
 
 @Autowired
+private RegionRepository regionRepository;
+
+@Autowired
 private JdbcTemplate jdbcTemplate;
+
+@Autowired
+private BussinessUnitRepository bussinessUnitRepository;
+
+@Autowired
+private PersonalManagementService personalManagementService;
+
+@Autowired
+private EmployeeDraftService employeeDraftService;
+
+@Autowired
+private PersonalRepository personalRepository;
+
+@Autowired
+private TeritoryRepoitory teritoryRepoitory;
 
 // create a enterprise..........................................................
 
@@ -46,7 +67,7 @@ private JdbcTemplate jdbcTemplate;
         // 1️⃣ Check if logged-in user has ENTERPRISE_ADMIN role
 
         boolean isAdmin = loggedInUser.getUserRoles().stream()
-                .anyMatch(userRole -> "ENTERPRISE_ADMIN".equals(userRole.getRole().getRole_name()));
+                .anyMatch(userRole -> "ENTERPRISE_ADMIN".equals(userRole.getRole().getRoleName()));
 
         if (!isAdmin) {
             throw new RuntimeException("Only role with ENTERPRISE_ADMIN can create enterprise");
@@ -70,6 +91,8 @@ private JdbcTemplate jdbcTemplate;
             throw new RuntimeException("An Enterprise Admin can create only one enterprise");
         }
 
+        System.out.println("logged in user"+loggedInUser.getEmail());
+
         // 4️⃣ Map DTO → Entity using IDs
         Enterprise enterprise = EnterpriseMapper.mapToEnterprise(
                 enterpriseDto,
@@ -91,11 +114,23 @@ private JdbcTemplate jdbcTemplate;
         // 5️⃣ Save entity
         Enterprise savedEnterprise = enterpriseRepo.save(enterprise);
 
+
+
+        // calling move the data from employee draft table to employee table method....
+        employeeDraftService.moveEmployeeDraft(loggedInUser.getUser_id(),eid);
+
+
         // 6️⃣ Map Entity → DTO and return
         return EnterpriseMapper.mapToEnterpriseDto(savedEnterprise);
 
 
     }
+
+
+    ///  Check enterprise exists..................................................................
+
+
+
 
 //    Update enterprise by eid..........................................
     @Override
@@ -144,14 +179,156 @@ private JdbcTemplate jdbcTemplate;
 
     }
 
+//    @Override
+//    public boolean isEnterpriseCeated(Users loggedInUser) {
+//        String email= loggedInUser.getEmail();
+//        Users user=userRepo.findByEmail(email);
+//        if(user==null){
+//            throw new RuntimeException("user not found");
+//        }
+//
+//        return enterpriseRepo.existsByCreatedBy(user.getUser_id());
+//    }
 
-
-//    display enterprises..............................
     @Override
-    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSINESS_ADMIN')")
-    public List<EnterpriseDto> getAll() {
-        List<Enterprise> enterprise=enterpriseRepo.findAll();
-        return enterprise.stream().map(enterprise1 -> EnterpriseMapper.mapToEnterpriseDto(enterprise1)).collect(Collectors.toList());
+    public CheckUpDto checkStatus(Users loggedInUser) {
+
+        // get employee using email
+        PersonalManagement employee =
+                personalRepository.findByEmail(loggedInUser.getEmail()).orElseThrow(()-> new RuntimeException("Employee not found"));
+
+        System.out.println("logged in user details" + employee);
+
+        boolean enterpriseCreate = false;
+        boolean bussinessCreate = false;
+        boolean regionCreate = false;
+
+        if(employee != null){
+
+            // check enterprise
+            Enterprise enterprise =
+                    enterpriseRepo.findByEid(employee.getEid()).orElseThrow((()-> new RuntimeException("enterprise not found")));
+
+            enterpriseCreate = enterprise != null;
+
+            if(enterpriseCreate){
+
+                List<BussinessUnit> buList =
+                        bussinessUnitRepository.findByEnterpriseId(enterprise.getEid());
+
+                bussinessCreate = buList != null && !buList.isEmpty();
+
+                if(bussinessCreate){
+
+                    for(BussinessUnit bu : buList){
+
+                        if(teritoryRepoitory.existsByBussinessUnitId(bu.getBuid())){
+                            regionCreate = true;
+                            break;
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return new CheckUpDto(enterpriseCreate,bussinessCreate,regionCreate);
+
+    }
+
+
+    /// CHECK ENTERPRISE WHEATHER THE ALREADY EXIST.........................
+    @Override
+    public ResponseEntity<EnterpriseDto> checkEnterpriseExist(Users loggedInUser) {
+        Enterprise enterprise=enterpriseRepo.findByCreatedBy(loggedInUser.getUser_id());
+        if(enterprise==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        EnterpriseDto e=EnterpriseMapper.mapToEnterpriseDto(enterprise);
+
+        return ResponseEntity.ok(e);
+    }
+
+
+    //    display enterprises..............................
+    @Override
+    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN')")
+    public List<EnterpriseDto> getAll(Users loggedInUser) {
+//          String enterpriseId = loggedInUser.getEnterpriseId();
+//        List<Enterprise> enterprise=enterpriseRepo.findAllByCreatedBy(loggedInUser.getUser_id());
+//        return enterprise.stream().map(enterprise1 -> EnterpriseMapper.mapToEnterpriseDto(enterprise1)).collect(Collectors.toList());
+
+
+
+//        boolean isEnterpriseAdmin = loggedInUser.getUserRoles().stream()
+//                .anyMatch(userRole ->
+//                        userRole.getRole().getRoleName().equals("ENTERPRISE_ADMIN")
+//                );
+//
+
+
+        // ✅ ENTERPRISE ADMIN → full data
+//        if (isEnterpriseAdmin) {
+//
+//            List<Enterprise> enterprises =
+//                    enterpriseRepo.findAllByCreatedBy(loggedInUser.getUser_id());
+//
+//            return enterprises.stream()
+//                    .map(EnterpriseMapper::mapToEnterpriseDto)
+//                    .collect(Collectors.toList());
+//        }
+
+
+        String email= loggedInUser.getEmail();
+
+        /// get the logged in user details from employeeee....................
+
+        PersonalManagement emp=personalRepository.findByEmail(email).
+                orElseThrow(()-> new RuntimeException("employee not found"));
+
+        System.out.println("logged in user details"+emp);
+
+        String enterpriseId=emp.getEid();
+
+        List<Enterprise> enterprise= Collections.singletonList(enterpriseRepo.findByEid(enterpriseId).orElseThrow(() -> new RuntimeException("enterprise not found")));
+
+
+        return enterprise.stream().map(a->EnterpriseMapper.mapToEnterpriseDto(a)).collect(Collectors.toList());
+
+
+
+
+        // BUSINESS ADMIN
+
+        // BUSINESS ADMIN
+
+//        boolean isBussinessAdmin=loggedInUser.getUserRoles().stream().
+//                anyMatch(userRole -> userRole.getRole().getRoleName().equals("BUSSINESS_ADMIN"));
+//
+//        if(isBussinessAdmin){
+//
+//
+//
+//        }
+
+//        List<BussinessUnit> units = bussinessUnitRepository.findAll();
+//
+//        if (units.isEmpty()) {
+//            throw new RuntimeException("No Business Unit found");
+//        }
+//
+//        String enterpriseId = units.get(0).getEnterpriseId();
+//
+//        Enterprise enterprise = enterpriseRepo.findByEid(enterpriseId)
+//                .orElseThrow(() -> new RuntimeException("Enterprise not found"));
+//
+//        return List.of(
+//                EnterpriseMapper.mapToEnterpriseDto(enterprise)
+//        );
     }
 
 

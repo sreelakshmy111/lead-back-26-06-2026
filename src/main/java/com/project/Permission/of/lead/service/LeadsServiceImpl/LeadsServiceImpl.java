@@ -169,7 +169,7 @@ public class LeadsServiceImpl implements LeadsService {
     }
 
 
-    /// ASSIGN EMPLOYE TO TERRITORY....................................................................
+    /// ASSIGN EMPLOYEE TO TERRITORY....................................................................
     @Override
     public LeadsDto assignEmployeeToLead(LeadsDto leadsDto, String eid, String buid, String lid, String tid, String empid, Users loggedInUser, UserPrinciple userPrinciple) {
 

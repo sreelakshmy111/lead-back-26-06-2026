@@ -12,8 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RoleDto {
 
-    private Long role_id;
-    private String role_name;
+    private Long roleId;
+    
+    private String roleName;
 
     private String description;
 
@@ -28,6 +29,9 @@ public class RoleDto {
     private String identifier;
 
     private Integer legalFormEnum;
+
+    public RoleDto(Long roleId, String roleName) {
+    }
 
 
 //

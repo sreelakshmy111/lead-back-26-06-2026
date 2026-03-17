@@ -42,7 +42,7 @@ public class ProductCatalogueController {
 
         Users loggedInUser = userPrinciple.getUser();
         System.out.println("loggedInUser:" + userPrinciple.getUsername());
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN")&& !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY HR MANAGER CAN CREATE PRODUCT");
          }
 
@@ -68,7 +68,7 @@ public class ProductCatalogueController {
                                            @RequestBody Map<String, Object> requestBody) {
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple, "BUSINESS_ADMIN") ) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONlY BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
@@ -91,7 +91,7 @@ public class ProductCatalogueController {
         System.out.println("Enter into ksu creation:" );
 
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple, "BUSINESS_ADMIN") ) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY BUSSINESS ADMIN CAN ACCESS");
         }
 
@@ -111,7 +111,7 @@ public class ProductCatalogueController {
     public ResponseEntity<?> getProductGroups(@PathVariable String eid,
                                               @PathVariable String buid,
                                               @AuthenticationPrincipal UserPrinciple userPrinciple) {
-        if(!hasRole(userPrinciple, "BUSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONlY BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
@@ -129,7 +129,7 @@ public class ProductCatalogueController {
                                              @PathVariable String pgid,
                                              @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
-        if(!hasRole(userPrinciple, "BUSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ON;Y BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
@@ -149,7 +149,7 @@ public class ProductCatalogueController {
                                            @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
 
-        if(!hasRole(userPrinciple, "BUSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ON;Y BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
@@ -168,8 +168,8 @@ public class ProductCatalogueController {
            @PathVariable String buid,
            @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
-       if (!hasRole(userPrinciple, "BUSINESS_ADMIN") &&
-               !hasRole(userPrinciple, "HR MANAGER")) {
+       if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&
+               !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
        }
 

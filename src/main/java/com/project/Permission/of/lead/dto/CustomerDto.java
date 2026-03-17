@@ -14,6 +14,7 @@ public class CustomerDto {
     private Long id;
     private String custId;
     private String first_name;
+    private String middle_name;
     private String last_name;
     private String gender;
     private LocalDate date_of_birth;

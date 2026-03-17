@@ -40,7 +40,7 @@ public class LeadStatusController {
 
 
         Users loggedInUser = userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("only bussiness admin can change lead status");
         }
 
@@ -59,7 +59,7 @@ public class LeadStatusController {
 
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("only bussiness admin can get lead_status");
         }
 
@@ -76,7 +76,7 @@ public class LeadStatusController {
                                           @RequestBody LeadStatusCustomDto leadStatusCustomDto) {
 
         Users loggedInUser = userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("only bussiness admin can create new stages");
         }
 
@@ -97,7 +97,7 @@ public class LeadStatusController {
 
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("only bussiness admin can delete the stage");
         }
 
@@ -116,7 +116,7 @@ public class LeadStatusController {
                                            @PathVariable Long stageId) {
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.ok("only bussiness admin can edit lead stages");
         }
 
@@ -146,7 +146,7 @@ public class LeadStatusController {
                                          @PathVariable String buid){
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSINESS_ADMIN")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("bussiness admin can get the lead stsge");
         }
 

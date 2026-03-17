@@ -79,7 +79,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple, "ENTERPRISE_ADMIN") && !hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires ENTERPRISE_ADMIN for update."), HttpStatus.FORBIDDEN);
 
         EnterpriseDto enterpriseDto = objectMapper.convertValue(requestBody, EnterpriseDto.class);
@@ -102,7 +102,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSSINESS ADMIN for update."), HttpStatus.FORBIDDEN);
 
 //        BussinessUnitDto bussinessUnitDto=objectMapper.convertValue(requestBody, BussinessUnitDto.class);
@@ -125,7 +125,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSSINESS ADMIN for update region."), HttpStatus.FORBIDDEN);
 
 //        RegionDto regionDto=objectMapper.convertValue(requestBody, RegionDto.class);
@@ -149,7 +149,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSSINESS ADMIN for update country."), HttpStatus.FORBIDDEN);
 
 //        RegionDto regionDto=objectMapper.convertValue(requestBody, RegionDto.class);
@@ -178,7 +178,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSSINESS ADMIN for update zone."), HttpStatus.FORBIDDEN);
 
 //        RegionDto regionDto=objectMapper.convertValue(requestBody, RegionDto.class);
@@ -207,7 +207,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSSINESS ADMIN for update zone."), HttpStatus.FORBIDDEN);
 
 //        RegionDto regionDto=objectMapper.convertValue(requestBody, RegionDto.class);
@@ -236,7 +236,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSSINESS ADMIN for update zone."), HttpStatus.FORBIDDEN);
 
 //        RegionDto regionDto=objectMapper.convertValue(requestBody, RegionDto.class);
@@ -267,7 +267,7 @@ public class PutHierarchyController {
 
         Users loggedUser=userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple,"BUSINESS_ADMIN"))
+        if (!hasRole(userPrinciple,"BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSSINESS ADMIN for update zone."), HttpStatus.FORBIDDEN);
 
 //        RegionDto regionDto=objectMapper.convertValue(requestBody, RegionDto.class);

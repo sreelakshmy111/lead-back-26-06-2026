@@ -88,12 +88,19 @@ public class UserPrinciple implements UserDetails {
         return true;
     }
 
-    public String getRole() {
+//    public String getRole() {
+//
+//        return user1.getUserRoles()
+//                .stream()
+//                .findFirst()
+//                .map((userRole -> userRole.getRole().getRoleName()))
+//                .orElse(null);
+//    }
+public List<String> getRoles() {
 
-        return user1.getUserRoles()
-                .stream()
-                .findFirst()
-                .map((userRole -> userRole.getRole().getRoleName()))
-                .orElse(null);
-    }
+    return user1.getUserRoles()
+            .stream()
+            .map(userRole -> userRole.getRole().getRoleName())
+            .collect(Collectors.toList());
+}
 }

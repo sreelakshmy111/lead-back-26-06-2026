@@ -60,7 +60,7 @@ public class SecurityConfig {
 //                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                )
         .authorizeHttpRequests(request->request
-                .requestMatchers("/login","users/create","/addresses",
+                .requestMatchers("/login","/users/create","/addresses",
                         "/master/**","get/employee_draft","/create/first/user","/captcha","/forgot-password","/reset-password").permitAll()
 
                 .anyRequest().authenticated())

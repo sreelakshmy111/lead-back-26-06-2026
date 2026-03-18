@@ -1,6 +1,7 @@
 package com.project.Permission.of.lead.service.UserServiceImpl;
 
 
+import com.project.Permission.of.lead.dto.ChangePasswordDto;
 import com.project.Permission.of.lead.dto.LoginResponseDto;
 import com.project.Permission.of.lead.dto.TowerDto;
 import com.project.Permission.of.lead.dto.UserDto;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -58,6 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
@@ -289,82 +294,40 @@ public LoginResponseDto verify(UserDto userDto) {
 
 
 
-//    public LoginResponseDto verify(UserDto userDto) {
-//
-//        Authentication authentication =
-//                authManager.authenticate(
-//                        new UsernamePasswordAuthenticationToken(
-//                                userDto.getUsername(),
-//                                userDto.getPassword()
-//
-//                        )
-//                );
-//
-//        if (!authentication.isAuthenticated()) {
-//            throw new RuntimeException("Invalid credentials");
-//        }
-//
-//        // 1️⃣ Load user from DB
-//        Users user = userRepo.findByUsername(userDto.getUsername());
-//        if (user == null) {
-//            throw new RuntimeException("User not found");
-//        }
-
-        // 5️⃣ Load tower from DB
-//        Tower tower = towerRepository.findById(user.getTowerId())
-//                .orElseThrow(() -> new RuntimeException("Tower not found"));
-
-
-
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // 2️⃣ Extract ROLE NAME (IMPORTANT)
-        // adjust getter based on your mapping
-//        String roleName = user.getUserRoles()
-//                .iterator()
-//                .next()
-//                .getRole()
-//                .getRoleName();   // e.g. "BU_ADMIN", "SALES"
-
-        // 3️⃣ Generate JWT WITH role
-//        String token= jwtService.generateToken(
-//                user.getUsername(),
-//                roleName
-//        );
-
-//        LoginResponseDto response=new LoginResponseDto();
-
-//        response.setUser(new UserDto(
-//                user.getUser_id(),
-//                user.getUsername(),
-//                user.getPassword(),
-//                user.getTowerId(),
-//                roleName
-//        ));
-
-//        response.setToken(token);
-//        response.setUserDto(new UserDto(
-//                user.getUser_id(),
-//                user.getUsername(),
-//                user.getPassword(),
-//                user.getEmail(),
-//                user.getAddressId(),
-//                user.getTowerId()
-//        ));
-
-//        response.setTowerDto(new TowerDto(
-//                tower.getId(),
-//                tower.getName()
-//        ));
-//
-//
-//        return response;
-//
-//    }
-
     @Override
     public TowerDto assignTower(TowerDto towerDto) {
         return null;
+    }
+
+
+    /// Change pass word...............................................................
+
+    @Override
+    public void changePassword(ChangePasswordDto dto, String username) {
+
+        String email=username;
+
+        Users user=userRepo.findByEmail(email);
+
+        if(user==null){
+            throw new RuntimeException("user not exist");
+        }
+
+        if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())){
+            throw new RuntimeException("old password not found");
+        }
+
+        if(!dto.getNewPassword().equals(dto.getConfirmPassword())){
+            throw new RuntimeException("passsword matches");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepo.save(user);
+
+
+
+
+
     }
 //
 //    @Override

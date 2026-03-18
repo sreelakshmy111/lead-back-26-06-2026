@@ -264,9 +264,14 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
                 orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
 
 
-        String role= userPrinciple.getRole();
+        List<String> roles= userPrinciple.getRoles();
+        System.out.println("ROLE: " + roles);
 
-        if(role.equals("ENTERPRISE_ADMIN")){
+        if(roles.contains("ENTERPRISE_ADMIN")){
+
+            System.out.println("ROLE: " + roles);
+            System.out.println("EID: " + eid);
+
             List<BussinessUnit> bussinessUnits =
                     bussinessRepo.findByEnterpriseId(eid);
 
@@ -275,7 +280,7 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
                     .toList();
         }
 
-        if(role.equals("BUSSINESS_ADMIN")){
+        if(roles.contains("BUSSINESS_ADMIN")){
 
             String email= loggedInUser.getEmail();
 
@@ -287,6 +292,8 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
             BussinessUnit bu = bussinessRepo.findByBuid(buid)
                     .orElseThrow(() -> new RuntimeException("Business Unit not found"));
+
+            System.out.println("BU LIST: " + bu);
 
             return List.of(BussinessUnitMapper.mapToBussinessEnterpriseDto(bu));
         }

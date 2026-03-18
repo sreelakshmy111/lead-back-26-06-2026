@@ -2,6 +2,10 @@ package com.project.Permission.of.lead.controller;
 
 import com.project.Permission.of.lead.dto.LoginResponseDto;
 import com.project.Permission.of.lead.dto.UserDto;
+import com.project.Permission.of.lead.entity.TokenData;
+import com.project.Permission.of.lead.entity.Users;
+import com.project.Permission.of.lead.repository.UserRepository;
+import com.project.Permission.of.lead.service.EmailService;
 import com.project.Permission.of.lead.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,14 @@ import jakarta.servlet.http.HttpSession;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @RestController
 
@@ -23,6 +34,12 @@ public class LoginController {
 
 @Autowired
     private UserService userService;
+
+@Autowired
+private UserRepository userRepository;
+
+@Autowired
+private EmailService emailService1;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto userDto,HttpSession session) {
@@ -85,10 +102,7 @@ public class LoginController {
     }
 
 
-    /// FORGOT PASSWORD.......................................................
-//
-//    @PostMapping("/forgot-password")
-//    public
+
 
 
 }

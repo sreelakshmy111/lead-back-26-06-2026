@@ -61,7 +61,7 @@ public class SecurityConfig {
 //                )
         .authorizeHttpRequests(request->request
                 .requestMatchers("/login","users/create","/addresses",
-                        "/master/**","get/employee_draft","/create/first/user","/captcha").permitAll()
+                        "/master/**","get/employee_draft","/create/first/user","/captcha","/forgot-password","/reset-password").permitAll()
 
                 .anyRequest().authenticated())
 //                .httpBasic(Customizer.withDefaults())

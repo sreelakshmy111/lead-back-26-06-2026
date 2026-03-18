@@ -179,7 +179,7 @@ public class LeadsController {
                                             @PathVariable String buid) {
 
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple,"BUSSNESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
             return ResponseEntity.ok("only bussiness admin can get leads..");
         }
 

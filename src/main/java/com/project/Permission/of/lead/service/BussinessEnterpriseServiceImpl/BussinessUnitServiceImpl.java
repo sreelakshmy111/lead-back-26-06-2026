@@ -75,7 +75,7 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
 
         // 3️⃣ Map DTO -> Entity using current user
-        BussinessUnit unit = BussinessUnitMapper.mapToBussinessEnterprise(bussinessUnitDto, loggedInUser.getUid(),null);
+        BussinessUnit unit = BussinessUnitMapper.mapToBussinessEnterprise(bussinessUnitDto, loggedInUser.getUser_id(),null);
 
         // 4️⃣ Link Enterprise ID
 

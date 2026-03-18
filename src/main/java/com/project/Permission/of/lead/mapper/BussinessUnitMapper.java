@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class BussinessUnitMapper {
 
-    public static BussinessUnit mapToBussinessEnterprise(BussinessUnitDto bussinessUnitDto, String createdBy, Long updatedBy) {
+    public static BussinessUnit mapToBussinessEnterprise(BussinessUnitDto bussinessUnitDto, Long createdBy, Long updatedBy) {
         LocalDateTime now = LocalDateTime.now();
 
         return new BussinessUnit(

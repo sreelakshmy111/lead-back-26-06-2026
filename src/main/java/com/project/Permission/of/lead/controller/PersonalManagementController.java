@@ -56,7 +56,7 @@ public class PersonalManagementController {
 
         if (!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("ACCESS DENIED ONLY FOR HR MANAGER ROLE");
+                    .body("ACCESS DENIED ONLY FOR HR MANAGER,BUSSINESS ADMIN AND ENTERPRISE ADMIN ROLE");
         }
 
         List<PersonalManagementDto> personalManagementDtos = personalManagementService.getAllEmployee(eid);
@@ -276,7 +276,7 @@ public class PersonalManagementController {
 
         Users loggedUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple, "BUSSINESS_ADMIN")) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body("Only HR MANAGER can assign territories to employees");

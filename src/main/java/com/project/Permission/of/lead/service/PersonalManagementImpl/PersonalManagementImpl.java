@@ -119,8 +119,8 @@ public class PersonalManagementImpl implements PersonalManagementService {
                 orElseThrow(()->new RuntimeException("Employee not found"));
 
         person.setFirstName(personalDto.getFirstName());
-        person.setMiddleName(person.getMiddleName());
-        person.setLastName(person.getLastName());
+        person.setMiddleName(personalDto.getMiddleName());
+        person.setLastName(personalDto.getLastName());
         person.setGender(personalDto.getGender());
         person.setDob(personalDto.getDob());
         person.setIsdCode(personalDto.getIsdCode());

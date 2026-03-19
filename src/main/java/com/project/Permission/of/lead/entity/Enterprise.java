@@ -62,7 +62,7 @@ public class Enterprise {
 
 
     @Column(name = "created_by_user_id")
-    private Long createdBy;
+    private String createdBy;
 
 
     @Column(name = "updated_at")
@@ -70,7 +70,7 @@ public class Enterprise {
 
 
     @Column(name = "updated_by_user_id")
-    private Long updatedBy;
+    private String updatedBy;
 
     @Column(name = "eid")
     private String eid;

@@ -23,9 +23,9 @@ private String contactPhone;
 
 private  boolean active;
 private LocalDateTime createdAt;
-private Long createdBy;
+private String createdBy;
 private LocalDateTime updatedAt;
-private Long updatedBy;
+private String updatedBy;
 
 private String eid;
 

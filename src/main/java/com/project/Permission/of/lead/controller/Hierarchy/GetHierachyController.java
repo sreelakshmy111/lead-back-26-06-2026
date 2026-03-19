@@ -75,7 +75,7 @@ public class GetHierachyController {
 //.......get enterprise.................................................
 
     @GetMapping("")
-    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN')")
+    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN','HR MANAGER','LEAD_ANALYST')")
     public ResponseEntity<List<EnterpriseDto>> getAllEnterprise(
             @AuthenticationPrincipal UserPrinciple userPrinciple) {
         Users loggedInUser=userPrinciple.getUser();
@@ -98,7 +98,7 @@ public class GetHierachyController {
 
     ///............get enterprise by eid.....................................................
     @GetMapping("/{eid}")
-    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN')")
+    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN','HR MANAGER',LEAD_ANALYST)")
     public ResponseEntity<EnterpriseDto> getEnterpriseById(@PathVariable String eid,
                                                            @AuthenticationPrincipal UserPrinciple userPrinciple) {
         EnterpriseDto dto = enterpriseService.getenterpriseByEid(eid);

@@ -298,6 +298,42 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
             return List.of(BussinessUnitMapper.mapToBussinessEnterpriseDto(bu));
         }
 
+        if(roles.contains("HR MANAGER")){
+
+            String email= loggedInUser.getEmail();
+
+            PersonalManagement employee= personalRepository.findByEmail(email).
+                    orElseThrow(()-> new RuntimeException("Employee not found for logged in user"));
+
+
+            String buid=employee.getBuid();
+
+            BussinessUnit bu = bussinessRepo.findByBuid(buid)
+                    .orElseThrow(() -> new RuntimeException("Business Unit not found"));
+
+            System.out.println("BU LIST: " + bu);
+
+            return List.of(BussinessUnitMapper.mapToBussinessEnterpriseDto(bu));
+        }
+
+        if(roles.contains("LEAD_ANALYST")){
+
+            String email= loggedInUser.getEmail();
+
+            PersonalManagement employee= personalRepository.findByEmail(email).
+                    orElseThrow(()-> new RuntimeException("Employee not found for logged in user"));
+
+
+            String buid=employee.getBuid();
+
+            BussinessUnit bu = bussinessRepo.findByBuid(buid)
+                    .orElseThrow(() -> new RuntimeException("Business Unit not found"));
+
+            System.out.println("BU LIST: " + bu);
+
+            return List.of(BussinessUnitMapper.mapToBussinessEnterpriseDto(bu));
+        }
+
 
      return Collections.emptyList();
     }

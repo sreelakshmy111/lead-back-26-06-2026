@@ -109,6 +109,7 @@ public class CustomerServiceImpl implements CustomerService {
                 orElseThrow(()->new RuntimeException("Customer contact not found"));
 
         customer.setFirst_name(customerDto.getFirst_name());
+        customer.setMiddle_name(customerDto.getMiddle_name());
         customer.setLast_name(customerDto.getLast_name());
         customer.setGender(customerDto.getGender());
         customer.setDate_of_birth(customerDto.getDate_of_birth());

@@ -96,7 +96,7 @@ private TeritoryRepoitory teritoryRepoitory;
         // 4️⃣ Map DTO → Entity using IDs
         Enterprise enterprise = EnterpriseMapper.mapToEnterprise(
                 enterpriseDto,
-                loggedInUser.getUser_id(), // pass creator ID
+                loggedInUser.getUid(), // pass creator ID
                 null                       // updatedBy is null initially
         );
 
@@ -166,7 +166,7 @@ private TeritoryRepoitory teritoryRepoitory;
         enterprise.setActive(updateEnterpriseDto.isActive());
 
         enterprise.setUpdatedAt(LocalDateTime.now());
-        enterprise.setUpdatedBy(loggedInUser.getUser_id());
+        enterprise.setUpdatedBy(loggedInUser.getUid());
 
         // 5️⃣ Save (triggers @PreUpdate -> updatedAt set automatically)
         Enterprise updated = enterpriseRepo.save(enterprise);
@@ -256,7 +256,7 @@ private TeritoryRepoitory teritoryRepoitory;
 
     //    display enterprises..............................
     @Override
-    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN')")
+    @PreAuthorize("hasAnyRole('ENTERPRISE_ADMIN', 'BUSSINESS_ADMIN','LEAD_ANALYST','HR MANAGER')")
     public List<EnterpriseDto> getAll(Users loggedInUser) {
 //          String enterpriseId = loggedInUser.getEnterpriseId();
 //        List<Enterprise> enterprise=enterpriseRepo.findAllByCreatedBy(loggedInUser.getUser_id());

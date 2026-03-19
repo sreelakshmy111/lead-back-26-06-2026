@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class EnterpriseMapper {
 
 
-    public static Enterprise mapToEnterprise(EnterpriseDto enterpriseDto, Long createdById, Long updatedById) {
+    public static Enterprise mapToEnterprise(EnterpriseDto enterpriseDto, String createdById, String updatedById) {
         LocalDateTime now = LocalDateTime.now();
         return new Enterprise(
                 enterpriseDto.getId(),

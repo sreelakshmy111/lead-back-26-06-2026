@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class LeadsMapper {
 
-    public static Leads mapToLeads(LeadsDto leadsDto, Long userId, String enterpriseId, String busssinessunitId) {
+    public static Leads mapToLeads(LeadsDto leadsDto, String userId, String enterpriseId, String busssinessunitId) {
         LocalDateTime now=LocalDateTime.now();
         return new Leads(
                 leadsDto.getId(),

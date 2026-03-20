@@ -16,9 +16,9 @@ public class TeritoryDto {
     private String description;
     private boolean active;
     private LocalDateTime creationAt;
-    private Long createdBy;
+    private String createdBy;
     private LocalDateTime updatedAt;
-    private Long updatedBy;
+    private String updatedBy;
 
     private String districtId;
     private String stateId;

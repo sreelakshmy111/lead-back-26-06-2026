@@ -33,9 +33,9 @@ public class EmployeeDraftDto {
     private List<String> territoryId= new ArrayList<>();
     private boolean active;
     private LocalDateTime createdAt;
-    private Long createdBy;
+    private String createdBy;
     private LocalDateTime updatedAt;
-    private Long updatedBy;
+    private String updatedBy;
     private Long addressId;
     private String password;
     private String tower;

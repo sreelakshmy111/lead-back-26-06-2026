@@ -31,7 +31,7 @@ public class Roles {
 
 
     @Column(name = "description", nullable = false, length = 500)
-    private String description;
+    private String description="";
 
     @Column(name = "is_disabled", nullable = false)
     private boolean isDisabled = false;
@@ -45,7 +45,7 @@ public class Roles {
     @Column(name = "position")
     private Integer position = 0;
 
-    @Column(name = "identifier", unique = true)
+    @Column(name = "identifier", unique = true, length = 255)
     private String identifier;
 
     @Column(name = "legal_form_enum")

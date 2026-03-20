@@ -67,7 +67,7 @@ public class CountryServiceImpl implements CountryService {
 
         System.out.println("Generated country ID: " + cid);
 
-        Country country=CountryMapper.mapToCountry(countryDto,loggedInUser.getUser_id(),null,rid,buid);
+        Country country=CountryMapper.mapToCountry(countryDto,loggedInUser.getUid(),null,rid,buid);
         country.setCid(cid);
         country.setActive(true);
         Country savedcountry=countryRepo.save(country);
@@ -151,7 +151,7 @@ public class CountryServiceImpl implements CountryService {
 //        country.setDescription(countryDto.getDescription());
         country.setActive(countryDto.isActive());
         country.setUpdatedAt(LocalDateTime.now());
-        country.setUpdatedBy(loggedUser.getUser_id());
+        country.setUpdatedBy(loggedUser.getUid());
 
         Country updatedcountry=countryRepo.save(country);
         return CountryMapper.mapToCountryDto(updatedcountry);

@@ -109,7 +109,7 @@ public class TeritoryServiceImpl implements TeritoryService {
 
         System.out.println("Generated territory ID: " + tid);
 
-        Teritory teritory= TeritoryMapper.mapToTeritory(teritoryDto,loggedInUser.getUser_id(),null,did,sid,zid,cid,rid,buid);
+        Teritory teritory= TeritoryMapper.mapToTeritory(teritoryDto,loggedInUser.getUid(),null,did,sid,zid,cid,rid,buid);
         teritory.setActive(true);
         teritory.setTid(tid);
         Teritory saved=teritoryRepo.save(teritory);
@@ -371,7 +371,7 @@ public class TeritoryServiceImpl implements TeritoryService {
 
         teritory.setActive(teritoryDto.isActive());
         teritory.setUpdatedAt(LocalDateTime.now());
-        teritory.setUpdatedBy(loggedUser.getUser_id());
+        teritory.setUpdatedBy(loggedUser.getUid());
 
         Teritory updated=teritoryRepo.save(teritory);
         return TeritoryMapper.mapToTeritoryDto(updated);

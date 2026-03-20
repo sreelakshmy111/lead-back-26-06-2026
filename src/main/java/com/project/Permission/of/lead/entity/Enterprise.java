@@ -43,14 +43,14 @@ public class Enterprise {
     @Column(name = "address_id")
     private Long addressId;
 
-    @Column(length = 255)
+    @Column(length = 255,name = "contact_email")
     private String contactEmail;
 
-    @Column(length = 4)
+    @Column(length = 4,name = "ids_code")
     private String isdCode;
 
 
-    @Column(length = 50)
+    @Column(length = 50,name = "contact_phone")
     private String contactPhone;
 
 

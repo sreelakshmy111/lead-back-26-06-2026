@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class CountryMapper {
 
-    public static Country mapToCountry(CountryDto countryDto, Long createdBy, Long updatedBy, String regionId, String bussinesUnitId) {
+    public static Country mapToCountry(CountryDto countryDto, String createdBy, String updatedBy, String regionId, String bussinesUnitId) {
         LocalDateTime now=LocalDateTime.now();
         return new Country(
 

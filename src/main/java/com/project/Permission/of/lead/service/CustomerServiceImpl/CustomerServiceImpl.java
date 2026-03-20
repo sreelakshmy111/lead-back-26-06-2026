@@ -63,11 +63,11 @@ public class CustomerServiceImpl implements CustomerService {
                                               String.class
         );
 
-        Customer createdCus= CustomerMapper.maptoCustomer(customerDto,eid,buid,loggedInUser.getUser_id());
+        Customer createdCus= CustomerMapper.maptoCustomer(customerDto,eid,buid,loggedInUser.getUid());
 
         createdCus.set_active(true);
         createdCus.setCustId(CustomerId);
-        createdCus.setCreated_by(loggedInUser.getUser_id());
+        createdCus.setCreated_by(loggedInUser.getUid());
         customerRepository.save(createdCus);
         CustomerDto createdCustomer=CustomerMapper.maptoCustomerDto(createdCus);
         return createdCustomer;
@@ -118,7 +118,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setEmail(customerDto.getEmail());
         customer.setUpdated_at(LocalDateTime.now());
-        customer.setUpdated_by(loggedUser.getUser_id());
+        customer.setUpdated_by(loggedUser.getUid());
         customer.set_active(customerDto.is_active());
 
         Customer updatedCustomer=customerRepository.save(customer);

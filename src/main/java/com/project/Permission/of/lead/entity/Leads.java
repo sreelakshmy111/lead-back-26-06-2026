@@ -63,12 +63,16 @@ public class Leads {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    private Long created_by;
+    @Column(name = "created_by")
+    private String created_by;
 
+    @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    private Long updated_by;
+    @Column(name = "updated_by")
+    private String updated_by;
 
+    @Column(name = "lead_status")
     private Long leadStatus;
 
     @Column(name = "next_follow_up")

@@ -23,11 +23,11 @@ public class TaskFollowUpDto {
 
     private LocalDateTime createdDate;
 
-    private Long createdBy;
+    private String createdBy;
 
     private LocalDateTime updatedDate;
 
-    private Long updatedBy;
+    private String updatedBy;
 
 
 }

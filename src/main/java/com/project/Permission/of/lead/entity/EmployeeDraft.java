@@ -41,6 +41,7 @@ public class EmployeeDraft {
     @Column(name = "date_of_birth")
     private LocalDate dob;
 
+    @Column(name = "isd_code")
     private String isdCode;
 
     @Column(name = "phone")
@@ -65,15 +66,19 @@ public class EmployeeDraft {
     @Column(name = "is_active")
     private boolean active;
 
+    @Column(name = "created_at")
     private LocalDateTime created_at;
 
     @Column(name = "created_by")
-    private Long createdBy;
+    private String createdBy;
 
+    @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    private Long updated_by;
+    @Column(name = "updated_by")
+    private String updated_by;
 
+    @Column(name = "address_id")
     private Long addressId;
 
 

@@ -26,9 +26,9 @@ public class CustomerDto {
     private String buid;
     private boolean is_active;
     private LocalDateTime created_at;
-    private Long created_by;
+    private String created_by;
     private LocalDateTime updated_at;
-    private Long updated_by;
+    private String updated_by;
 
 
 }

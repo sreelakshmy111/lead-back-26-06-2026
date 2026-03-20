@@ -17,9 +17,9 @@ public class RegionDto {
     private String description;
     private boolean active;
     private LocalDateTime createdAt;
-    private Long createdBy;
+    private String createdBy;
     private LocalDateTime updatedAt;
-    private Long updatedBy;
+    private String updatedBy;
     private String bussinessUnitId;
     private String rid;
 

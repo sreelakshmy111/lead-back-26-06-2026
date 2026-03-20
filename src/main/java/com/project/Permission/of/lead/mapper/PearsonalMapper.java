@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class PearsonalMapper {
 
-    public static PersonalManagement maptoPersonalManagement(PersonalManagementDto personalDto, Long loggedInUser, String enterpriseId) {
+    public static PersonalManagement maptoPersonalManagement(PersonalManagementDto personalDto, String loggedInUser, String enterpriseId) {
         LocalDateTime now=LocalDateTime.now();
         return new PersonalManagement(
                 personalDto.getId(),

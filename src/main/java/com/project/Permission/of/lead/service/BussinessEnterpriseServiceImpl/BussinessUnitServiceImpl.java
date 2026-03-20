@@ -75,7 +75,7 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
 
         // 3️⃣ Map DTO -> Entity using current user
-        BussinessUnit unit = BussinessUnitMapper.mapToBussinessEnterprise(bussinessUnitDto, loggedInUser.getUser_id(),null);
+        BussinessUnit unit = BussinessUnitMapper.mapToBussinessEnterprise(bussinessUnitDto, loggedInUser.getUid(),null);
 
         // 4️⃣ Link Enterprise ID
 
@@ -133,7 +133,7 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
 // audit fields
         bu.setUpdatedAt(LocalDateTime.now());
-        bu.setUpdatedBy(currentUser.getUser_id());
+        bu.setUpdatedBy(currentUser.getUid());
 
         // 4️⃣ Update BU fields from DTO
 
@@ -171,7 +171,7 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
        bussinessUnit.setContactPhone(bussinessUnitDto.getContactPhone());
        bussinessUnit.setActive(bussinessUnitDto.isActive());
        bussinessUnit.setUpdatedAt(LocalDateTime.now());
-       bussinessUnit.setUpdatedBy(loggedUser.getUser_id());
+       bussinessUnit.setUpdatedBy(loggedUser.getUid());
 
        BussinessUnit updated=bussinessRepo.save(bussinessUnit);
        return BussinessUnitMapper.mapToBussinessEnterpriseDto(updated);

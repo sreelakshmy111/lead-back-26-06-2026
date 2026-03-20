@@ -14,7 +14,7 @@ public interface EmployeeDraftRepository extends JpaRepository<EmployeeDraft,Lon
 
     boolean existsByEmail(String email);
 
-    EmployeeDraft findByCreatedBy(Long userId);
+    EmployeeDraft findByCreatedBy(String userId);
 
 //    Optional<Object> findByEmpdId(Long empDraftId);
 }

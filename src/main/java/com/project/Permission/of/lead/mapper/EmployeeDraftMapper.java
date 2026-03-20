@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class EmployeeDraftMapper {
 
-    public static EmployeeDraft maptoEmployeeDraft(EmployeeDraftDto employeeDraftDto, Long loggedInUser) {
+    public static EmployeeDraft maptoEmployeeDraft(EmployeeDraftDto employeeDraftDto, String loggedInUser) {
         LocalDateTime now=LocalDateTime.now();
         return new EmployeeDraft(
                 employeeDraftDto.getId(),

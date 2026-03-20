@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ZoneMapper {
 
 
-    public static Zone mapToZone(ZoneDto zoneDto, Long createdBy, Long updatedBy, String countryId, String regionId, String bussinessunitId) {
+    public static Zone mapToZone(ZoneDto zoneDto, String createdBy, String updatedBy, String countryId, String regionId, String bussinessunitId) {
         LocalDateTime now=LocalDateTime.now();
         return new Zone(
 

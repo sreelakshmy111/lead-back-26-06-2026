@@ -55,7 +55,7 @@ public class ProductCatalogueImpl implements ProductCatalogueService {
                                                          String.class
                        );
 
-        ProductCatalogue group= ProductCatalougeMapper.mapToProductCatalogue(productCatalogueDto,eid,buid,loggedInUser.getUser_id());
+        ProductCatalogue group= ProductCatalougeMapper.mapToProductCatalogue(productCatalogueDto,eid,buid,loggedInUser.getUid());
         group.setPid(productId);
         group.setClassification("PG");
         group.setActive(true);
@@ -88,7 +88,7 @@ public class ProductCatalogueImpl implements ProductCatalogueService {
 
         System.out.println("Checking BU: " + buid);
 
-        ProductCatalogue productType=ProductCatalougeMapper.mapToProductCatalogue(productCatalogueDto,eid,buid,loggedInUser.getUser_id());
+        ProductCatalogue productType=ProductCatalougeMapper.mapToProductCatalogue(productCatalogueDto,eid,buid,loggedInUser.getUid());
         productType.setPid(productTypeId);
         productType.setParentId(pgid);
         productType.setClassification("PT");
@@ -125,7 +125,7 @@ public class ProductCatalogueImpl implements ProductCatalogueService {
 
         System.out.println("Checking BU: " + bussinessUnitId);
 
-        ProductCatalogue productSku=ProductCatalougeMapper.mapToProductCatalogue(productCatalogueDto,enterpriseId,bussinessUnitId,loggedInUser.getUser_id());
+        ProductCatalogue productSku=ProductCatalougeMapper.mapToProductCatalogue(productCatalogueDto,enterpriseId,bussinessUnitId,loggedInUser.getUid());
         productSku.setPid(productSkuId);
         productSku.setParentId(productTypeId);
         productSku.setClassification("PS");

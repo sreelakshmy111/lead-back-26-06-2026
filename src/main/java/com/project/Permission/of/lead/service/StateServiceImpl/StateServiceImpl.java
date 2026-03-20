@@ -84,7 +84,7 @@ public class StateServiceImpl implements StateService {
         );
         System.out.println("Generated state ID: " + sid);
 
-        State state= StateMapper.mapToState(stateDto,loggedInUser.getUser_id(),null,zid,cid,rid,buid);
+        State state= StateMapper.mapToState(stateDto,loggedInUser.getUid(),null,zid,cid,rid,buid);
         state.setSid(sid);
         state.setActive(true);
         State savedState=stateRepo.save(state);
@@ -242,7 +242,7 @@ public class StateServiceImpl implements StateService {
 
         state.setActive(stateDto.isActive());
         state.setUpdatedAt(LocalDateTime.now());
-        state.setUpdatedBy(loggedUser.getUser_id());
+        state.setUpdatedBy(loggedUser.getUid());
 
         State updated=stateRepo.save(state);
         return StateMapper.mapToStateDto(updated);

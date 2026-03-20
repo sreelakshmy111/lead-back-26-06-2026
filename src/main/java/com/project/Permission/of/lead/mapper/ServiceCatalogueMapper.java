@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class ServiceCatalogueMapper {
 
-    public static ServiceCatalogue mapToServiceCatalogue(ServiceCatalogueDto serviceCatalogueDto, String enterpriseId, String bussinessUnitId, Long userId){
+    public static ServiceCatalogue mapToServiceCatalogue(ServiceCatalogueDto serviceCatalogueDto, String enterpriseId, String bussinessUnitId, String userId){
         LocalDateTime now=LocalDateTime.now();
         return new  ServiceCatalogue(
                 serviceCatalogueDto.getId(),

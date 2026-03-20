@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class RegionMapper {
 
 
-    public static Region mapToRegion(RegionDto regionDto, Long createdBy, Long updatedBy, String bussinessUnitId) {
+    public static Region mapToRegion(RegionDto regionDto, String createdBy, String updatedBy, String bussinessUnitId) {
 
         LocalDateTime now = LocalDateTime.now();
         return new Region(

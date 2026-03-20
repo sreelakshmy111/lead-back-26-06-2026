@@ -47,6 +47,7 @@ public class PersonalManagement {
     @Column(name = "date_of_birth")
     private LocalDate dob;
 
+    @Column(name = "ids_code")
     private String isdCode;
 
     @Column(name = "phone")
@@ -71,14 +72,19 @@ public class PersonalManagement {
     @Column(name = "is_active")
     private boolean active;
 
+    @Column(name = "created_at")
     private LocalDateTime created_at;
 
-    private Long created_by;
+    @Column(name = "created_by")
+    private String created_by;
 
+    @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    private Long updated_by;
+    @Column(name = "updated_by")
+    private String updated_by;
 
+    @Column(name = "address_id")
     private Long addressId;
 
 }

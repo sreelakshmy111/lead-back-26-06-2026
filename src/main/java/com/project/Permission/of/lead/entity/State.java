@@ -27,16 +27,18 @@ public class State {
     @Column(name = "is_active")
     private boolean active;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 
     @Column(name = "created_by_id")
-    private Long createdBy;
+    private String createdBy;
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by_id")
-    private Long updatedBy;
+    private String updatedBy;
 
     @Column(name = "zone_id")
     private String zoneId;

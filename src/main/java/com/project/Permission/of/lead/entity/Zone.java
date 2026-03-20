@@ -29,24 +29,29 @@ public class Zone {
     @Column(name = "is_active")
     private boolean active;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 
     @Column(name = "created_by_id")
-    private Long createdBy;
+    private String createdBy;
 
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
 
-    @JoinColumn(name = "updated_by_id")
-    private Long updatedBy;
+    @Column(name = "updated_by_id")
+    private String updatedBy;
 
 
     @Column(name = "country_id")
     private String countryId;
 
+
     @Column(name = "region_id")
     private String regionId;
+
 
     @Column(name = "bussiness_unit_id")
     private String bussinessUnitId;

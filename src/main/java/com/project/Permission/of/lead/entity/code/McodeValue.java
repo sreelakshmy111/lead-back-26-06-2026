@@ -19,14 +19,19 @@ public class McodeValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "is_active")
     private boolean isActive;
 
+    @Column(name = "code_description")
     private String codeDescription;
 
+    @Column(name = "code_value")
     private String codeValue;
 
+    @Column(name = "is_mandatory")
     private boolean isMandatory;
 
+    @Column(name = "order_position")
     private int orderPosition;
 
     @Column(name = "store_value",length = 100)

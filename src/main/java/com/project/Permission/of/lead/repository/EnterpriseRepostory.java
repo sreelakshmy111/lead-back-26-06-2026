@@ -1,7 +1,6 @@
 package com.project.Permission.of.lead.repository;
 
 import com.project.Permission.of.lead.entity.Enterprise;
-import com.project.Permission.of.lead.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,15 +11,15 @@ import java.util.Optional;
 public interface EnterpriseRepostory extends JpaRepository<Enterprise,Long> {
 
     Optional<Enterprise> findByEid(String enterpriseId);
-    boolean existsByCreatedBy(Users loggedInUser);
+//    boolean existsByCreatedBy(String loggedInUser);
 
-    boolean existsByCreatedBy(Long userId);
+    boolean existsByCreatedBy(String userId);
 
     List<Enterprise> findCreatedBy();
 
-    List<Enterprise> findAllByCreatedBy(Long userId);
+    List<Enterprise> findAllByCreatedBy(String userId);
 
-    Enterprise findByCreatedBy(Long userId);
+    Enterprise findByCreatedBy(String userId);
 
 //    List<Enterprise> findAllById(List<String> enterpriseIds);
 

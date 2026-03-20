@@ -94,7 +94,7 @@ public class DistrictServiceImpl implements DistrictService {
 
         System.out.println("Generated District ID: " +did);
 
-       District district=DistrictMapper.mapToDistrict(districtDto,loggedInUser.getUser_id(),null,sid,zid,cid,rid,buid);
+       District district=DistrictMapper.mapToDistrict(districtDto,loggedInUser.getUid(),null,sid,zid,cid,rid,buid);
        district.setDid(did);
        District savedDistrict=districtRepo.save(district);
        return DistrictMapper.mapToDistrictDto(savedDistrict);
@@ -276,7 +276,7 @@ public class DistrictServiceImpl implements DistrictService {
         }
         district.setActive(districtDto.isActive());
         district.setUpdatedAt(LocalDateTime.now());
-        district.setUpdatedBy(loggedUser.getUser_id());
+        district.setUpdatedBy(loggedUser.getUid());
 
         District updated=districtRepo.save(district);
         return DistrictMapper.mapToDistrictDto(updated);

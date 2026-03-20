@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class StateMapper {
 
 
-    public static State mapToState(StateDto stateDto, Long createdBy, Long updatedBy, String zoneId, String countryId, String regionId, String bussinessUnitId) {
+    public static State mapToState(StateDto stateDto, String createdBy, String updatedBy, String zoneId, String countryId, String regionId, String bussinessUnitId) {
         LocalDateTime now=LocalDateTime.now();
         return  new State(
                 stateDto.getId(),

@@ -58,7 +58,7 @@ public class RegionServiceImpl implements RegionService {
         );
         System.out.println("Generated Rid ID: " + rid);
 
-        Region region= RegionMapper.mapToRegion(regionDto,loggedInUser.getUser_id(),null,buid);
+        Region region= RegionMapper.mapToRegion(regionDto,loggedInUser.getUid(),null,buid);
         region.setActive(true);
         region.setRid(rid);
         Region saved=regionRepo.save(region);
@@ -158,7 +158,7 @@ public class RegionServiceImpl implements RegionService {
 //        region.setDescription(regionDto.getDescription());
         region.setActive(regionDto.isActive());
         region.setUpdatedAt(LocalDateTime.now());
-        region.setUpdatedBy(loggedUser.getUser_id());
+        region.setUpdatedBy(loggedUser.getUid());
 
         Region updated=regionRepo.save(region);
         return RegionMapper.mapToRegionDto(updated);

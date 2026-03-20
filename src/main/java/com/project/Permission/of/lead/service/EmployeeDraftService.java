@@ -10,5 +10,5 @@ public interface EmployeeDraftService {
 
     boolean checkEmployeeByEmail(String email);
 
-    void moveEmployeeDraft(Long createdBy,String eid);
+    void moveEmployeeDraft(String createdBy,String eid);
 }

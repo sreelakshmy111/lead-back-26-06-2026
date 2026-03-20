@@ -53,7 +53,7 @@ public class ServiceCatalogueImpl implements ServiceCatalogueService {
                 String.class
         );
 
-        ServiceCatalogue serviceCatalouge= ServiceCatalogueMapper.mapToServiceCatalogue(serviceCatalogueDto1,eid,buid,loggedInUser.getUser_id());
+        ServiceCatalogue serviceCatalouge= ServiceCatalogueMapper.mapToServiceCatalogue(serviceCatalogueDto1,eid,buid,loggedInUser.getUid());
         serviceCatalouge.setActive(true);
         serviceCatalouge.setClassification("SG");
         serviceCatalouge.setSid(sid);
@@ -85,7 +85,7 @@ public class ServiceCatalogueImpl implements ServiceCatalogueService {
                                                 new Object[] {"SERVICE TYPE"},
                                                 String.class);
 
-        ServiceCatalogue serviceType=ServiceCatalogueMapper.mapToServiceCatalogue(serviceCatalogueDto,eid,buid,loggedInUser.getUser_id());
+        ServiceCatalogue serviceType=ServiceCatalogueMapper.mapToServiceCatalogue(serviceCatalogueDto,eid,buid,loggedInUser.getUid());
         serviceType.setActive(true);
         serviceType.setClassification("ST");
         serviceType.setParentId(sgid);
@@ -118,7 +118,7 @@ public class ServiceCatalogueImpl implements ServiceCatalogueService {
                                                                 new Object[] {"SERVICE ITEM"},
                                                                 String.class);
 
-        ServiceCatalogue item=ServiceCatalogueMapper.mapToServiceCatalogue(serviceCatalogueDto,eid,buid,loggedInUser.getUser_id());
+        ServiceCatalogue item=ServiceCatalogueMapper.mapToServiceCatalogue(serviceCatalogueDto,eid,buid,loggedInUser.getUid());
         item.setActive(true);
         item.setClassification("SI");
         item.setParentId(stid);

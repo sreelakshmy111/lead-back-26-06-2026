@@ -135,7 +135,7 @@ private UserRepository userRepository;
         EmployeeDraft employeeDraft =
                 EmployeeDraftMapper.maptoEmployeeDraft(
                         employeeDraftDto,
-                        createdUser.getUser_id()
+                        createdUser.getUid()
                 );
 
         employeeDraftRepository.save(employeeDraft);
@@ -175,7 +175,7 @@ private UserRepository userRepository;
 
     ///  move the meployee_draft table data to employee table....................
     @Override
-    public void moveEmployeeDraft(Long createdBy, String eid) {
+    public void moveEmployeeDraft(String createdBy, String eid) {
         EmployeeDraft e=employeeDraftRepository.findByCreatedBy(createdBy);
         System.out.println("employe draft details"+e);
 

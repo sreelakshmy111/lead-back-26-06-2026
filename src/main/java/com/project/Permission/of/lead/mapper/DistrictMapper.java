@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class DistrictMapper {
 
-    public static District mapToDistrict(DistrictDto districtDto, Long createdBy, Long updatedBy, String stateId, String zoneId, String countryId, String regionId, String bussinessUnitId) {
+    public static District mapToDistrict(DistrictDto districtDto, String createdBy, String updatedBy, String stateId, String zoneId, String countryId, String regionId, String bussinessUnitId) {
         LocalDateTime now=LocalDateTime.now();
         return new District(
 

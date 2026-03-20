@@ -25,6 +25,7 @@ public class ServiceCatalogue {
 
     private String sid;
 
+    @Column(name = "parent_id")
     private  String parentId;
 
     private String eid;
@@ -33,12 +34,17 @@ public class ServiceCatalogue {
 
     private boolean active;
 
+    @Column(name = "created_at")
     private LocalDateTime created_at;
 
-    private Long created_by;
+    @Column(name = "created_by")
+    private String created_by;
 
+
+    @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    private Long updated_by;
+    @Column(name = "updated_by")
+    private String updated_by;
 
 }

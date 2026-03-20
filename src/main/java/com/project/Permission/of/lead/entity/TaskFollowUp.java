@@ -29,11 +29,15 @@ public class TaskFollowUp {
 
     private String note;
 
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    private Long createdBy;
+    @Column(name = "created_by")
+    private String createdBy;
 
+    @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
-    private Long updatedBy;
+    @Column(name = "updated_by")
+    private String updatedBy;
 }

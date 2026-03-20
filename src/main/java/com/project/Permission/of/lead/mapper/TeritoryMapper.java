@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class TeritoryMapper {
 
 
-    public static Teritory mapToTeritory(TeritoryDto teritoryDto, Long createdBy, Long updatedBy, String districtId, String stateId, String zoneId, String countryId, String regionId, String bussinessUnitId) {
+    public static Teritory mapToTeritory(TeritoryDto teritoryDto, String createdBy, String updatedBy, String districtId, String stateId, String zoneId, String countryId, String regionId, String bussinessUnitId) {
        LocalDateTime now=LocalDateTime.now();
         return new Teritory(
 

@@ -87,7 +87,7 @@ private TeritoryRepoitory teritoryRepoitory;
 
         // 3️⃣ Check if the enterprise already exists for this admin
 
-        if (enterpriseRepo.existsByCreatedBy(loggedInUser.getUser_id())) {
+        if (enterpriseRepo.existsByCreatedBy(loggedInUser.getUid())) {
             throw new RuntimeException("An Enterprise Admin can create only one enterprise");
         }
 
@@ -117,7 +117,7 @@ private TeritoryRepoitory teritoryRepoitory;
 
 
         // calling move the data from employee draft table to employee table method....
-        employeeDraftService.moveEmployeeDraft(loggedInUser.getUser_id(),eid);
+        employeeDraftService.moveEmployeeDraft(loggedInUser.getUid(),eid);
 
 
         // 6️⃣ Map Entity → DTO and return
@@ -243,7 +243,7 @@ private TeritoryRepoitory teritoryRepoitory;
     /// CHECK ENTERPRISE WHEATHER THE ALREADY EXIST.........................
     @Override
     public ResponseEntity<EnterpriseDto> checkEnterpriseExist(Users loggedInUser) {
-        Enterprise enterprise=enterpriseRepo.findByCreatedBy(loggedInUser.getUser_id());
+        Enterprise enterprise=enterpriseRepo.findByCreatedBy(loggedInUser.getUid());
         if(enterprise==null){
             return ResponseEntity.notFound().build();
         }

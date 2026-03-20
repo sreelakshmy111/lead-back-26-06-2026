@@ -72,7 +72,7 @@ public class ZoneServiceImpl implements ZoneService {
 
         System.out.println("Generated Zone ID: " + zid);
 
-        Zone zone= ZoneMapper.mapToZone(zoneDto,loggedInUser.getUser_id(),null,cid,rid,buid);
+        Zone zone= ZoneMapper.mapToZone(zoneDto,loggedInUser.getUid(),null,cid,rid,buid);
         zone.setZid(zid);
         zone.setActive(true);
         Zone savedZone=zoneRepo.save(zone);
@@ -205,7 +205,7 @@ public class ZoneServiceImpl implements ZoneService {
         }
         zone.setActive(zoneDto.isActive());
         zone.setUpdatedAt(LocalDateTime.now());
-        zone.setUpdatedBy(loggedUser.getUser_id());
+        zone.setUpdatedBy(loggedUser.getUid());
 
         Zone updateZone=zoneRepo.save(zone);
         return ZoneMapper.mapToZoneDto(updateZone);

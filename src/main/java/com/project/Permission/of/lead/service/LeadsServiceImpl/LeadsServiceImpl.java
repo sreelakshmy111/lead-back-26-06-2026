@@ -79,7 +79,7 @@ public class LeadsServiceImpl implements LeadsService {
             );
         }
 
-        Leads leads= LeadsMapper.mapToLeads(leadsDto,loggedInUser.getUser_id(),eid,buid);
+        Leads leads= LeadsMapper.mapToLeads(leadsDto,loggedInUser.getUid(),eid,buid);
         leads.setActive(true);
         leads.setLid(leadId);
         leads.setLeadStatus(leadStage);
@@ -281,7 +281,7 @@ public class LeadsServiceImpl implements LeadsService {
         taskFollowUp.setNextFollowUp(leadsDto.getNextFollowUp());
         taskFollowUp.setNote(leadsDto.getNote());
         taskFollowUp.setCreatedDate(LocalDateTime.now());
-        taskFollowUp.setCreatedBy(loggedInUser.getUser_id());
+        taskFollowUp.setCreatedBy(loggedInUser.getUid());
 
         taskFollowUPRepository.save(taskFollowUp);
 
@@ -341,7 +341,7 @@ public class LeadsServiceImpl implements LeadsService {
         leads.setContactId(leadsDto.getContactId());
         leads.setTerritoryId(leadsDto.getTerritoryId());
         leads.setUpdated_at(LocalDateTime.now());
-        leads.setUpdated_by(loggedInUser.getUser_id());
+        leads.setUpdated_by(loggedInUser.getUid());
         leadsRepository.save(leads);
 
         return LeadsMapper.mapToLeadsDto(leads);

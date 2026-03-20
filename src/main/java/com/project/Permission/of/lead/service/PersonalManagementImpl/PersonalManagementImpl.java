@@ -80,7 +80,7 @@ public class PersonalManagementImpl implements PersonalManagementService {
                 orElseThrow(()-> new RuntimeException("Enterprise not found"));
 
 
-        PersonalManagement personalManagement = PearsonalMapper.maptoPersonalManagement(personalManagementDto,loggedInUser.getUser_id(),eid);
+        PersonalManagement personalManagement = PearsonalMapper.maptoPersonalManagement(personalManagementDto,loggedInUser.getUid(),eid);
         personalManagement.setActive(true);
         personalManagement.setEmpId(emp_id);
         PersonalManagement savedEmployee=personalRepository.save(personalManagement);
@@ -130,7 +130,7 @@ public class PersonalManagementImpl implements PersonalManagementService {
         person.setExperience(personalDto.getExperience());
         person.setActive(personalDto.isActive());
         person.setUpdated_at(LocalDateTime.now());
-        person.setUpdated_by(loggedUser.getUser_id());
+        person.setUpdated_by(loggedUser.getUid());
 
         personalRepository.save(person);
         return PearsonalMapper.maptoPersonalManagementDto(person);

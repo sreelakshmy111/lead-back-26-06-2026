@@ -48,12 +48,12 @@ private EmailService emailService1;
         System.out.println("SESSION CAPTCHA: " + sessionCaptcha);
         System.out.println("USER CAPTCHA: " + userDto.getCaptcha());
 
-        if(sessionCaptcha == null ||
-                !sessionCaptcha.equalsIgnoreCase(userDto.getCaptcha())) {
-
-            return ResponseEntity.badRequest().body("Invalid Captcha");
-        }
-        session.removeAttribute("captcha");
+//        if(sessionCaptcha == null ||
+//                !sessionCaptcha.equalsIgnoreCase(userDto.getCaptcha())) {
+//
+//            return ResponseEntity.badRequest().body("Invalid Captcha");
+//        }
+//        session.removeAttribute("captcha");
 
         LoginResponseDto response = userService.verify(userDto);
 
@@ -63,31 +63,31 @@ private EmailService emailService1;
 
 
     // 🔹 CAPTCHA API
-    @GetMapping("/captcha")
-    public void getCaptcha(HttpSession session, HttpServletResponse response) throws Exception {
-
-        String captchaText = UUID.randomUUID().toString().substring(0,5);
-
-
-        session.setAttribute("captcha", captchaText);
-
-        int width = 150;
-        int height = 50;
-
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics g = image.getGraphics();
-
-        g.setColor(Color.WHITE);
-        g.fillRect(0,0,width,height);
-
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 30));
-        g.drawString(captchaText, 20, 35);
-
-        response.setContentType("image/png");
-
-        ImageIO.write(image,"png",response.getOutputStream());
-    }
+//    @GetMapping("/captcha")
+//    public void getCaptcha(HttpSession session, HttpServletResponse response) throws Exception {
+//
+//        String captchaText = UUID.randomUUID().toString().substring(0,5);
+//
+//
+//        session.setAttribute("captcha", captchaText);
+//
+//        int width = 150;
+//        int height = 50;
+//
+//        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+//        Graphics g = image.getGraphics();
+//
+//        g.setColor(Color.WHITE);
+//        g.fillRect(0,0,width,height);
+//
+//        g.setColor(Color.BLACK);
+//        g.setFont(new Font("Arial", Font.BOLD, 30));
+//        g.drawString(captchaText, 20, 35);
+//
+//        response.setContentType("image/png");
+//
+//        ImageIO.write(image,"png",response.getOutputStream());
+//    }
 
 
 //

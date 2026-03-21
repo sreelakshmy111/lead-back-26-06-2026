@@ -12,6 +12,7 @@ import com.project.Permission.of.lead.entity.Users;
 import com.project.Permission.of.lead.mapper.UserMapper;
 import com.project.Permission.of.lead.repository.*;
 import com.project.Permission.of.lead.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -63,6 +64,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private HttpServletRequest request;
 
 
 
@@ -281,7 +285,12 @@ public LoginResponseDto verify(UserDto userDto) {
     Map<String, Object> cloudResponse = getCloudFlare(user.getEmail());
 
 
+    String storedCaptcha = (String) request.getSession().getAttribute("captcha");
 
+    if (storedCaptcha == null ||
+            !storedCaptcha.equalsIgnoreCase(userDto.getCaptcha())) {
+        throw new RuntimeException("Invalid Captcha");
+    }
 
     LoginResponseDto response = new LoginResponseDto();
     response.setToken(token);

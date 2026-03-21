@@ -40,6 +40,12 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public CountryDto createCountry(CountryDto countryDto, String eid, String buid, String rid, Users loggedInUser) {
 
+        System.out.println("USER OBJECT: " + loggedInUser);
+        System.out.println("USER ID: " + loggedInUser.getUser_id());
+        System.out.println("UID: " + loggedInUser.getUid());
+
+
+
         Enterprise enterprise=enterpriseRepo.findByEid(eid)
                 .orElseThrow(()-> new RuntimeException("enterprise not found"));
 

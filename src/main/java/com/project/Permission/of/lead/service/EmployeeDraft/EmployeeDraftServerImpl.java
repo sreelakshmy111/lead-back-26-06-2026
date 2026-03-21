@@ -10,6 +10,7 @@ import com.project.Permission.of.lead.service.UserServiceImpl.JWTService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -43,6 +44,9 @@ private UserRepository userRepository;
 
     @Autowired
     private PersonalRepository personalRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
 
 
@@ -113,9 +117,17 @@ private UserRepository userRepository;
 
         //  Create User..................................................
 
+
+        String usr_id=jdbcTemplate.queryForObject(
+                "SELECT create_entity_id(?)",
+                new Object[]{"USER"},
+                String.class
+        );
+
         Users user = new Users();
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setUid(usr_id);
 
         Users createdUser = userRepository.save(user);
 

@@ -194,6 +194,11 @@ private TeritoryRepoitory teritoryRepoitory;
     public CheckUpDto checkStatus(Users loggedInUser) {
 
         // get employee using email
+
+        Users u=userRepo.findByEmail(loggedInUser.getEmail());
+        if(u==null){
+
+        }
         PersonalManagement employee =
                 personalRepository.findByEmail(loggedInUser.getEmail()).orElseThrow(()-> new RuntimeException("Employee not found"));
 

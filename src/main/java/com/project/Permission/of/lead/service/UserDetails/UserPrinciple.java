@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 public class UserPrinciple implements UserDetails {
     private final Users user1;
 
+    private String selectedBuid;
+
     public UserPrinciple(Users user1) {
         this.user1 = user1;
     }
@@ -37,6 +39,8 @@ public class UserPrinciple implements UserDetails {
                 .collect(Collectors.toList());
 
         roles.addAll(permissions); // merge roles and permissions
+
+
         return roles;
 
 
@@ -103,4 +107,7 @@ public List<String> getRoles() {
             .map(userRole -> userRole.getRole().getRoleName())
             .collect(Collectors.toList());
 }
+
+
+
 }

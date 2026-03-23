@@ -22,4 +22,6 @@ public interface BussinessUnitRepository extends JpaRepository<BussinessUnit, Lo
     List<BussinessUnit> findByCreatedBy(String userId);
 
     boolean existsByEnterpriseId(String id);
+
+    boolean existsByBuidBAndEnterpriseId(String buid, String eid);
 }

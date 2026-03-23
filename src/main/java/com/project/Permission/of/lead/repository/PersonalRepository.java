@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,8 @@ LIKE LOWER(CONCAT('%',:keyword,'%'))
 OR LOWER(e.email) LIKE(CONCAT('%',:keyword,'%')))
 """)
     List<PersonalManagement> searchEmployeeByEnterpriseAndBussinessUnit(@Param("keyword") String keyword, @Param("eid") String eid,@Param("buid") String buid);
+
+    Optional<PersonalManagement> findByCreatedBy(String uid);
 
 
 //    List<PersonalManagement> findByEidAndBuidAndTerritory(String enterpriseId, String bussinessUnitId, String territoryId);

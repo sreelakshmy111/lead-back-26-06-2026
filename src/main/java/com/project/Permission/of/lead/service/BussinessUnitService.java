@@ -26,4 +26,6 @@ public interface BussinessUnitService {
     void linkAddress(Long enterpriseId, Long bussiessunitId, Long addressId);
 
     BussinessUnitDto getBussinessByIdEnterpriseById(String eid, String buid);
+
+    void validBuAccess(UserPrinciple userPrinciple, String buid);
 }

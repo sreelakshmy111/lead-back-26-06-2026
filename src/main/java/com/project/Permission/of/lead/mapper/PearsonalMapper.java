@@ -60,9 +60,9 @@ public class PearsonalMapper {
                 personal.getTerritoryId(),
                 personal.isActive(),
                 personal.getCreated_at(),
-                personal.getCreated_by(),
+                personal.getCreatedBy(),
                 personal.getUpdated_at(),
-                personal.getCreated_by(),
+                personal.getUpdated_by(),
                 personal.getAddressId()
         );
     }

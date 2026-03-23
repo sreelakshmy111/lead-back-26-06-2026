@@ -150,6 +150,7 @@ private UserRepository userRepository;
                         createdUser.getUid()
                 );
 
+//        employeeDraft.setCreatedBy(usr_id);
         employeeDraftRepository.save(employeeDraft);
 
         // 6️⃣ Generate Token (single role)
@@ -204,6 +205,8 @@ private UserRepository userRepository;
         p.setExperience(e.getExperience());
         p.setActive(e.isActive());
         p.setEid(eid);
+        p.setCreatedBy(e.getCreatedBy());
+        p.setCreated_at(e.getCreated_at());
         p.setAddressId(e.getAddressId());
 
          personalRepository.save(p);

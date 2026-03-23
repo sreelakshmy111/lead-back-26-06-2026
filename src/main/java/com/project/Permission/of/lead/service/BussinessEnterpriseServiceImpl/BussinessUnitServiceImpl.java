@@ -388,4 +388,47 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
 
 
+    /// / bussiness unit validation chacking after enterprise admin logged in...........
+
+    public void validBuAccess(UserPrinciple userPrinciple,String buid){
+
+        Users u1=userPrinciple.getUser();
+
+        PersonalManagement employee=personalRepository.findByCreatedBy(u1.getUid()).
+                orElseThrow(()-> new RuntimeException("employee not found for that "));
+
+
+        String employeeBuid = employee.getBuid();
+
+        List<Roles> roles=u1.getUserRoles().stream().map(a->a.getRole()).toList();
+
+        if(roles.contains("ENTERPRISE_ADMIN")){
+
+            boolean valid= bussinessRepo.existsByBuidBAndEnterpriseId(
+                    buid,employee.getEid()
+            );
+
+
+            if(!valid){
+                throw new RuntimeException("ACESS DENIED :Bu is not in your enterprise");
+            }
+
+            return;
+        }
+
+        if(roles.contains("BUSSINESS_ADMIN") ||
+           roles.contains("HR MANAGER") ||
+           roles.contains("LEAD_ANALYST")){
+
+            if(!employeeBuid.equals(buid)){
+                throw new RuntimeException("ACCESS DENIED :Invalid Bu");
+            }
+
+            return;
+        }
+
+
+    throw  new RuntimeException("ACCESS DENIED :No valid role");
+    }
+
 }

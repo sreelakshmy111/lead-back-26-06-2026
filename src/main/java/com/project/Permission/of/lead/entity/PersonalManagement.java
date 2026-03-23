@@ -76,7 +76,7 @@ public class PersonalManagement {
     private LocalDateTime created_at;
 
     @Column(name = "created_by")
-    private String created_by;
+    private String createdBy;
 
     @Column(name = "updated_at")
     private LocalDateTime updated_at;

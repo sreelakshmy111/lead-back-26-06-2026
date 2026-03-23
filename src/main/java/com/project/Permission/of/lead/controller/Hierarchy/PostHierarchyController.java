@@ -66,6 +66,9 @@ public class PostHierarchyController {
     @Autowired
     private LeadsController leadsController;
 
+    @Autowired
+
+
     private boolean hasRole(UserPrinciple userPrinciple,String role){
         return userPrinciple.getAuthorities().stream().
                 anyMatch(a->a.getAuthority().equals("ROLE_" + role));
@@ -122,6 +125,8 @@ public class PostHierarchyController {
         if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
             return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
+
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
 
         RegionDto regionDto = objectMapper.convertValue(requestBody, RegionDto.class);
         RegionDto createdRegion = regionService.createRegions(regionDto, eid, buid, loggedInUser);

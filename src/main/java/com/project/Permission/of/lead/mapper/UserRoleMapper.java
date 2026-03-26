@@ -8,7 +8,7 @@ public class UserRoleMapper {
     // DTO → Entity
     public static UserRole mapToUserRole(Users user, Roles role) {
         // 1️⃣ Create composite key
-        UserRoleId id = new UserRoleId(user.getUser_id(), role.getRoleId());
+        UserRoleId id = new UserRoleId(user.getUid(), role.getRoleId());
 
         // 2️⃣ Create new entity
         UserRole userRole = new UserRole();
@@ -23,7 +23,7 @@ public class UserRoleMapper {
     // Entity → DTO
     public static UserRoleDto mapToUserRoleDto(UserRole userRole) {
         return new UserRoleDto(
-                userRole.getUser().getUser_id(),
+                userRole.getUser().getUid(),
                 userRole.getRole().getRoleId()
         );
     }

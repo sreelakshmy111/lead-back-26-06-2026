@@ -27,8 +27,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.management.relation.Role;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -249,17 +251,14 @@ public LoginResponseDto verify(UserDto userDto) {
     // 2️⃣ Extract ROLE NAME (IMPORTANT)
     // adjust getter based on your mapping..............................
 
-    String roleName = null;
+//    List<String> roles;
 
+    List<String> roles = null;
     if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
-        roleName = user.getUserRoles()
-                .iterator()
-                .next()
-                .getRole()
-                .getRoleName();
+        roles = user.getUserRoles().stream().map(userRole -> userRole.getRole().getRoleName()).toList();
+
+
     }
-
-
 
 
 //    String roleName = user.getUserRoles()
@@ -267,8 +266,6 @@ public LoginResponseDto verify(UserDto userDto) {
 //            .next()                                    /// ealier code....................................
 //            .getRole()
 //            .getRoleName();   // e.g. "BU_ADMIN", "SALES"
-
-
 
 
     //  Generate JWT WITH role
@@ -279,7 +276,7 @@ public LoginResponseDto verify(UserDto userDto) {
 
     String token = jwtService.generateToken(
             user.getEmail(),
-            roleName
+            roles
     );
 
     Map<String, Object> cloudResponse = getCloudFlare(user.getEmail());
@@ -298,7 +295,6 @@ public LoginResponseDto verify(UserDto userDto) {
     response.setTower(cloudResponse);   // change type to Map
 
     return response;
-
 
 
 }

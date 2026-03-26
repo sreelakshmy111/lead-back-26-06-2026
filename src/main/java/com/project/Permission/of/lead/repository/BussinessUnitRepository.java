@@ -23,5 +23,6 @@ public interface BussinessUnitRepository extends JpaRepository<BussinessUnit, Lo
 
     boolean existsByEnterpriseId(String id);
 
-    boolean existsByBuidBAndEnterpriseId(String buid, String eid);
+
+    boolean existsByBuidAndEnterpriseId(String buid, String eid);
 }

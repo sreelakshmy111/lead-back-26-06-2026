@@ -26,7 +26,7 @@ private final RoleRepository roleRepo;
 private final UserRolerepository userRoleRepo;
 
     public UserRoleDto assignRoleToUser(@RequestBody UserRoleDto dto) {
-        var user = userRepo.findById(dto.getUserId())
+        var user = userRepo.findByUid(dto.getUid())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         var role = roleRepo.findById(dto.getRoleId())
@@ -39,7 +39,7 @@ private final UserRolerepository userRoleRepo;
         userRoleRepo.save(userRole);
 
         // 4️⃣ Return DTO
-        return new UserRoleDto(dto.getUserId(), dto.getRoleId());
+        return new UserRoleDto(dto.getUid(), dto.getRoleId());
     }
 
 }

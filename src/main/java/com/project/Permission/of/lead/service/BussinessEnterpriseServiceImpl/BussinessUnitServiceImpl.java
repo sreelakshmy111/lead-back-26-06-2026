@@ -9,6 +9,7 @@ import com.project.Permission.of.lead.service.LeadStatusService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -335,6 +336,25 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
         }
 
 
+
+//        if (roles.stream().anyMatch(role ->
+//                role.equals("BUSSINESS_ADMIN") ||
+//                        role.equals("HR MANAGER") ||
+//                        role.equals("LEAD_ANALYST"))) {
+//
+//            String email = loggedInUser.getEmail();
+//
+//            PersonalManagement employee = personalRepository.findByEmail(email)
+//                    .orElseThrow(() -> new RuntimeException("Employee not found"));
+//
+//            String buid = employee.getBuid();
+//
+//            BussinessUnit bu = bussinessRepo.findByBuid(buid)
+//                    .orElseThrow(() -> new RuntimeException("Business Unit not found"));
+//
+//            return List.of(BussinessUnitMapper.mapToBussinessEnterpriseDto(bu));
+//        }
+
      return Collections.emptyList();
     }
 
@@ -390,21 +410,24 @@ public class BussinessUnitServiceImpl implements BussinessUnitService {
 
     /// / bussiness unit validation chacking after enterprise admin logged in...........
 
-    public void validBuAccess(UserPrinciple userPrinciple,String buid){
+    public void validBuAccess( UserPrinciple userPrinciple, String buid){
 
         Users u1=userPrinciple.getUser();
 
-        PersonalManagement employee=personalRepository.findByCreatedBy(u1.getUid()).
-                orElseThrow(()-> new RuntimeException("employee not found for that "));
+        PersonalManagement employee=personalRepository.findByEmail(u1.getEmail()).
+                orElseThrow(()-> new RuntimeException("user not found on  employee table"));
 
 
         String employeeBuid = employee.getBuid();
 
-        List<Roles> roles=u1.getUserRoles().stream().map(a->a.getRole()).toList();
+        List<String> roles= u1.getUserRoles()
+                .stream()
+                .map(a -> a.getRole().getRoleName())
+                .toList();
 
         if(roles.contains("ENTERPRISE_ADMIN")){
 
-            boolean valid= bussinessRepo.existsByBuidBAndEnterpriseId(
+            boolean valid= bussinessRepo.existsByBuidAndEnterpriseId(
                     buid,employee.getEid()
             );
 

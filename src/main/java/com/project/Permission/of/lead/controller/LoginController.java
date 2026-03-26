@@ -5,15 +5,15 @@ import com.project.Permission.of.lead.dto.UserDto;
 import com.project.Permission.of.lead.entity.TokenData;
 import com.project.Permission.of.lead.entity.Users;
 import com.project.Permission.of.lead.repository.UserRepository;
+import com.project.Permission.of.lead.service.BussinessUnitService;
 import com.project.Permission.of.lead.service.EmailService;
+import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import com.project.Permission.of.lead.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
 import javax.imageio.ImageIO;
@@ -40,6 +40,9 @@ private UserRepository userRepository;
 
 @Autowired
 private EmailService emailService1;
+
+@Autowired
+private BussinessUnitService bussinessUnitService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto userDto,HttpSession session) {
@@ -104,7 +107,14 @@ private EmailService emailService1;
 
 /// / select bussiness unit after enterprise admin logged in................................
 
+@PostMapping("/set-privilege")
+public ResponseEntity<?> create(
+        @AuthenticationPrincipal UserPrinciple userPrinciple, @PathVariable String buid) {
 
+    bussinessUnitService.validBuAccess(userPrinciple, buid);
+
+    return ResponseEntity.ok("OK");
+}
 
 
 }

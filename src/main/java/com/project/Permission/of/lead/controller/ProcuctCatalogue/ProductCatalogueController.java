@@ -3,6 +3,7 @@ package com.project.Permission.of.lead.controller.ProcuctCatalogue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.Permission.of.lead.dto.ProductCatalogueDto;
 import com.project.Permission.of.lead.entity.Users;
+import com.project.Permission.of.lead.service.BussinessUnitService;
 import com.project.Permission.of.lead.service.ProductCatalogueService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.apache.catalina.User;
@@ -26,6 +27,9 @@ public class ProductCatalogueController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private BussinessUnitService bussinessUnitService;
+
     private boolean hasRole(UserPrinciple userPrinciple, String role) {
         return userPrinciple.getAuthorities().stream().
                 anyMatch(authority -> authority.getAuthority().equals("ROLE_" + role));
@@ -42,10 +46,11 @@ public class ProductCatalogueController {
 
         Users loggedInUser = userPrinciple.getUser();
         System.out.println("loggedInUser:" + userPrinciple.getUsername());
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN")&& !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN")&& !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY HR MANAGER CAN CREATE PRODUCT");
          }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         ProductCatalogueDto productCatalogueDto = objectMapper.convertValue(requestBody, ProductCatalogueDto.class);
 
         ProductCatalogueDto createGroup = productCatalogueService.createProductGroup(productCatalogueDto, loggedInUser, eid,buid);
@@ -68,10 +73,11 @@ public class ProductCatalogueController {
                                            @RequestBody Map<String, Object> requestBody) {
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONlY BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
             ProductCatalogueDto productCatalogueDto = objectMapper.convertValue(requestBody, ProductCatalogueDto.class);
             ProductCatalogueDto save=productCatalogueService.createProductType(productCatalogueDto,loggedInUser,eid,buid,pgid);
             return ResponseEntity.ok(save);
@@ -91,11 +97,11 @@ public class ProductCatalogueController {
         System.out.println("Enter into ksu creation:" );
 
         Users loggedInUser=userPrinciple.getUser();
-        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY BUSSINESS ADMIN CAN ACCESS");
         }
 
-
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
             ProductCatalogueDto productCatalogueDto=objectMapper.convertValue(requestBody, ProductCatalogueDto.class);
             ProductCatalogueDto saved=productCatalogueService.createProductSku(productCatalogueDto,loggedInUser,eid,buid,pgid,ptid);
             return ResponseEntity.ok(saved);
@@ -111,10 +117,11 @@ public class ProductCatalogueController {
     public ResponseEntity<?> getProductGroups(@PathVariable String eid,
                                               @PathVariable String buid,
                                               @AuthenticationPrincipal UserPrinciple userPrinciple) {
-        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONlY BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
             List<ProductCatalogueDto> productTypes = productCatalogueService.getProductGroups(eid,buid);
             return ResponseEntity.ok(productTypes);
         }
@@ -129,11 +136,12 @@ public class ProductCatalogueController {
                                              @PathVariable String pgid,
                                              @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
-        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ON;Y BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
         // return list of product types
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
             List<ProductCatalogueDto> productTypes = productCatalogueService.getProductTypes(eid,buid,pgid);
             return ResponseEntity.ok(productTypes);
         }
@@ -149,11 +157,12 @@ public class ProductCatalogueController {
                                            @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
 
-        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if(!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ON;Y BUSSINESS ADMIN CAN CREATE GROUP TYPE");
         }
 
             // return list of product types
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
             List<ProductCatalogueDto> productTypes = productCatalogueService.getProductSku(eid, buid, pgid,ptid);
             return ResponseEntity.ok(productTypes);
         }
@@ -169,10 +178,10 @@ public class ProductCatalogueController {
            @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") &&
-               !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+               !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
        }
-
+       bussinessUnitService.validBuAccess(userPrinciple, buid);
        List<ProductCatalogueDto> catalogue =
                productCatalogueService.getFullCatalogue(eid, buid);
 

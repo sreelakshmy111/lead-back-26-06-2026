@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.Permission.of.lead.dto.ProductCatalogueDto;
 import com.project.Permission.of.lead.dto.ServiceCatalogueDto;
 import com.project.Permission.of.lead.entity.Users;
+import com.project.Permission.of.lead.service.BussinessUnitService;
 import com.project.Permission.of.lead.service.ServiceCatalogueService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class ServiceCatalougeController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private BussinessUnitService bussinessUnitService;
+
     private boolean hasRole(UserPrinciple userPrinciple, String role) {
         return userPrinciple.getAuthorities().stream().
                 anyMatch(authority -> authority.getAuthority().equals("ROLE_" + role));
@@ -45,7 +49,7 @@ public class ServiceCatalougeController {
                 !hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         List<ServiceCatalogueDto> catalogue =
         serviceCatalogueService.getFullCatalogue(eid, buid);
 
@@ -66,6 +70,7 @@ public class ServiceCatalougeController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY HR MANAGER CAN CREATE PRODUCT");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
          ServiceCatalogueDto serviceGroup = serviceCatalogueService.createServiceGroup(serviceCatalogueDto1, eid, buid, loggedInUser);
 
          return ResponseEntity.ok(serviceGroup);
@@ -87,7 +92,7 @@ public class ServiceCatalougeController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY BUSSINESS ADMIN CAN CREATE SERVICE TYPE");
         }
 
-
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
             ServiceCatalogueDto serviceGroup = serviceCatalogueService.createServiceType(serviceCatalogueDto, eid, buid, sgid, loggedInUser);
 
             return ResponseEntity.ok(serviceGroup);
@@ -110,6 +115,7 @@ public class ServiceCatalougeController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY BUSSINESS ADMIN CAN CREATE SERVICE TYPE");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         ServiceCatalogueDto serviceGroup = serviceCatalogueService.createServiceItem(serviceCatalogueDto, eid, buid, sgid, stid, loggedInUser);
 
         return ResponseEntity.ok(serviceGroup);
@@ -130,6 +136,7 @@ public class ServiceCatalougeController {
             return ResponseEntity.ok("ONLY BUSINESS ADMIN CAN GET SERVICE TYPE");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         List<ServiceCatalogueDto> serviceGroup = serviceCatalogueService.getServiceGroups(eid, buid, loggedInUser);
 
         return ResponseEntity.ok(serviceGroup);
@@ -149,7 +156,7 @@ public class ServiceCatalougeController {
             return ResponseEntity.ok("ONLY BUSINESS ADMIN CAN GET SERVICE TYPE");
         }
 
-
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         List<ServiceCatalogueDto> serviceTypes = serviceCatalogueService.getServiceTypes(eid, buid, sgid, loggedInUser);
         return ResponseEntity.ok(serviceTypes);
     }
@@ -171,7 +178,7 @@ public class ServiceCatalougeController {
             return ResponseEntity.ok("ONLY BUSINESS ADMIN CAN GET SERVICE TYPE");
         }
 
-
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         List<ServiceCatalogueDto> ServiceItems = serviceCatalogueService.getServiceItems(eid, buid, sgid, stid, loggedInUser);
         return ResponseEntity.ok(ServiceItems);
     }

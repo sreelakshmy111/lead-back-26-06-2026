@@ -3,6 +3,7 @@ package com.project.Permission.of.lead.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.Permission.of.lead.dto.CustomerDto;
 import com.project.Permission.of.lead.entity.Users;
+import com.project.Permission.of.lead.service.BussinessUnitService;
 import com.project.Permission.of.lead.service.CustomerService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class CustomerController {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    private BussinessUnitService bussinessUnitService;
 
     private boolean hasRole(UserPrinciple userPrinciple,String role){
         return userPrinciple.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_" + role));
@@ -75,10 +79,11 @@ public class CustomerController {
 
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN")){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only bussiness admin can create customers!");
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"ENTERPRISE_ADMIN")){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only bussiness admin and enterprise can create customers!");
         }
 
+            bussinessUnitService.validBuAccess(userPrinciple, buid);
             CustomerDto customerDto=objectMapper.convertValue(requestBody,CustomerDto.class);
             CustomerDto createdCustomer=customerService.createCustomer(customerDto,eid,buid,loggedInUser);
             return ResponseEntity.ok(createdCustomer);
@@ -95,11 +100,11 @@ public class CustomerController {
 
          Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") &&!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple,"ENTERPRISE_ADMIN")){
             return ResponseEntity.ok("Only bussiness admin can get customers!");
         }
 
-
+            bussinessUnitService.validBuAccess(userPrinciple, buid);
             List<CustomerDto> customers=customerService.getCustomers(loggedInUser,eid,buid);
             return ResponseEntity.ok(customers);
         }
@@ -114,12 +119,12 @@ public class CustomerController {
                                                    @PathVariable String cuid) {
 
     Users loggedUser=userPrinciple.getUser();
-    if(!hasRole(userPrinciple,"BUSSINESS_ADMIN")){
+    if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"ENTERPRISE_ADMIN")){
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "ONLY BUSINESS ADMIN CAN PERFORM THIS ACTION");
     }
 
 
-
+       bussinessUnitService.validBuAccess(userPrinciple, buid);
         CustomerDto customerDto=objectMapper.convertValue(requestBody,CustomerDto.class);
         CustomerDto updateContact=customerService.updateContact(customerDto,loggedUser,eid,buid,cuid);
         return ResponseEntity.ok(updateContact);

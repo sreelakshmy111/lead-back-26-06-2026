@@ -66,7 +66,7 @@ public class PostHierarchyController {
     @Autowired
     private LeadsController leadsController;
 
-    @Autowired
+
 
 
     private boolean hasRole(UserPrinciple userPrinciple,String role){
@@ -122,8 +122,8 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
-            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
+        if (!(hasRole(userPrinciple, "BUSSINESS_ADMIN") || hasRole(userPrinciple, "ENTERPRISE_ADMIN")))
+            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN or ENTERPRISE_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
         bussinessUnitService.validBuAccess(userPrinciple, buid);
@@ -149,10 +149,12 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
-            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
+
+        if (!(hasRole(userPrinciple, "BUSSINESS_ADMIN") || hasRole(userPrinciple, "ENTERPRISE_ADMIN")))
+            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN or ENTERPRISE_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         CountryDto countryDto = objectMapper.convertValue(requestBody, CountryDto.class);
 
         CountryDto created = countryService.createCountry(countryDto, eid, buid, rid, loggedInUser);
@@ -174,12 +176,14 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
-            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
+
+        if (!(hasRole(userPrinciple, "BUSSINESS_ADMIN") || hasRole(userPrinciple, "ENTERPRISE_ADMIN")))
+            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN or ENTERPRISE_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
         ZoneDto zoneDto = objectMapper.convertValue(requestBody, ZoneDto.class);
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         ZoneDto created =zoneService.createZone(zoneDto,eid,buid,rid,cid,loggedInUser);
         return ResponseEntity.status(HttpStatus.OK).body(created);
 
@@ -202,12 +206,13 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
-            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
+        if (!(hasRole(userPrinciple, "BUSSINESS_ADMIN") || hasRole(userPrinciple, "ENTERPRISE_ADMIN")))
+            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN or ENTERPRISE_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
         StateDto stateDto=objectMapper.convertValue(requestBody,StateDto.class);
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         StateDto savedState=stateService.createState(stateDto,loggedInUser,zid,cid,rid,buid,eid);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedState);
@@ -231,10 +236,11 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
-            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
+        if (!(hasRole(userPrinciple, "BUSSINESS_ADMIN") || hasRole(userPrinciple, "ENTERPRISE_ADMIN")))
+            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN or ENTERPRISE_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
 
         DistrictDto districtDto=objectMapper.convertValue(requestBody,DistrictDto.class);
         DistrictDto saveDistrict=districtService.createDistrict(districtDto,loggedInUser,sid,zid,cid,rid,buid,eid);
@@ -261,11 +267,12 @@ public class PostHierarchyController {
 
 
         Users loggedInUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN"))
-            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN for Create."), HttpStatus.FORBIDDEN);
+
+        if (!(hasRole(userPrinciple, "BUSSINESS_ADMIN") || hasRole(userPrinciple, "ENTERPRISE_ADMIN")))
+            return new ResponseEntity<>(Map.of("error", "Access Denied: Requires BUSINESS_ADMIN or ENTERPRISE_ADMIN for Create."), HttpStatus.FORBIDDEN);
 
 
-
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         TeritoryDto teritoryDto=objectMapper.convertValue(requestBody, TeritoryDto.class);
         TeritoryDto saveTeritory=teritoryService.createTeritory(teritoryDto,loggedInUser,did,sid,zid,cid,rid,buid,eid);
         return ResponseEntity.ok().body(saveTeritory);

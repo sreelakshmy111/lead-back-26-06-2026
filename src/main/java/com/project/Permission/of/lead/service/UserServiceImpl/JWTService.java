@@ -9,13 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import javax.crypto.KeyGenerator;
 
@@ -41,7 +36,7 @@ public class JWTService {
 }
 
 
-public String generateToken(String username,String role) {
+public String generateToken(String username, List<String> role) {
 
         Map<String,Object> claims = new HashMap<>();
         claims.put("role", role);

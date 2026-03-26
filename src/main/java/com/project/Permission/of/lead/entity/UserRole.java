@@ -22,8 +22,14 @@ public class UserRole implements Serializable {
     private UserRoleId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("userId") // This tells JPA to map to the key in UserRoleId
-    @JoinColumn(name = "user_id")
+//    @MapsId("uid") // This tells JPA to map to the key in UserRoleId
+    @JoinColumn(
+            name = "uid",
+            referencedColumnName = "uid",
+            insertable = false,
+            updatable = false
+    )
+//    @JoinColumn(name = "uid")
     private Users user;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,7 +44,7 @@ public class UserRole implements Serializable {
     public UserRole(Users user, Roles role) {
         this.user = user;
         this.role = role;
-        this.id = new UserRoleId(user.getUser_id(), role.getRoleId());
+        this.id = new UserRoleId(user.getUid(), role.getRoleId());
     }
 
     // Getters and Setters

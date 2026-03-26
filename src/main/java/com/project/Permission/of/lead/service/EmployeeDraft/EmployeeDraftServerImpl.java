@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -153,10 +154,13 @@ private UserRepository userRepository;
 //        employeeDraft.setCreatedBy(usr_id);
         employeeDraftRepository.save(employeeDraft);
 
+
+
+
         // 6️⃣ Generate Token (single role)
         String token = jwtService.generateToken(
                 createdUser.getEmail(),
-                role.getRoleName()
+                Collections.singletonList(role.getRoleName())
         );
 
 

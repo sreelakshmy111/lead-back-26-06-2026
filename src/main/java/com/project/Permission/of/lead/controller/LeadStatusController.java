@@ -4,6 +4,7 @@ import com.project.Permission.of.lead.dto.LeadStatusCustomDto;
 import com.project.Permission.of.lead.entity.LeadStatusCustom;
 import com.project.Permission.of.lead.entity.Users;
 import com.project.Permission.of.lead.repository.LeadStatusCustomRepository;
+import com.project.Permission.of.lead.service.BussinessUnitService;
 import com.project.Permission.of.lead.service.LeadStatusService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import org.apache.catalina.User;
@@ -25,6 +26,9 @@ public class LeadStatusController {
     @Autowired
     private LeadStatusCustomRepository leadStatusCustomRepository;
 
+    @Autowired
+    private BussinessUnitService bussinessUnitService;
+
 
     private boolean hasRole(UserPrinciple userPrinciple, String role) {
         return userPrinciple.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_" + role));
@@ -40,10 +44,11 @@ public class LeadStatusController {
 
 
         Users loggedInUser = userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.ok("only bussiness admin can change lead status");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         LeadStatusCustomDto status = leadStatusService.leadStatus(eid, buid, leadStatusCustomDto, loggedInUser);
         return ResponseEntity.ok(status);
 
@@ -59,10 +64,11 @@ public class LeadStatusController {
 
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.ok("only bussiness admin can get lead_status");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         List<LeadStatusCustomDto> stages = leadStatusService.getLeadStages(eid, buid, loggedInUser);
         return ResponseEntity.ok(stages);
     }
@@ -76,10 +82,11 @@ public class LeadStatusController {
                                           @RequestBody LeadStatusCustomDto leadStatusCustomDto) {
 
         Users loggedInUser = userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.ok("only bussiness admin can create new stages");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         LeadStatusCustomDto addStage = leadStatusService.createNewStage(eid, buid, leadStatusCustomDto, loggedInUser);
 
 
@@ -97,10 +104,11 @@ public class LeadStatusController {
 
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.ok("only bussiness admin can delete the stage");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         LeadStatusCustomDto reponse = leadStatusService.deleteStage(eid, buid, stageId);
         return ResponseEntity.ok("DELETEION SUCCESSFULL OF STAGE");
     }
@@ -116,10 +124,11 @@ public class LeadStatusController {
                                            @PathVariable Long stageId) {
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.ok("only bussiness admin can edit lead stages");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         LeadStatusCustomDto stages = leadStatusService.editLeadsStage(eid, buid, stageId, leadStatusCustomDto);
         return ResponseEntity.ok(stages);
     }
@@ -146,10 +155,11 @@ public class LeadStatusController {
                                          @PathVariable String buid){
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST")){
+        if(!hasRole(userPrinciple,"BUSSINESS_ADMIN") && !hasRole(userPrinciple,"LEAD_ANALYST") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")){
             return ResponseEntity.ok("bussiness admin can get the lead stsge");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         LeadStatusCustomDto lead=leadStatusService.findLeadByAsc(eid,buid,loggedInUser);
         return ResponseEntity.ok(lead);
     }

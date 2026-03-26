@@ -7,6 +7,7 @@ import com.project.Permission.of.lead.dto.PersonalManagementDto;
 import com.project.Permission.of.lead.entity.Users;
 import com.project.Permission.of.lead.mapper.PearsonalMapper;
 import com.project.Permission.of.lead.repository.PersonalRepository;
+import com.project.Permission.of.lead.service.BussinessUnitService;
 import com.project.Permission.of.lead.service.PersonalManagementService;
 import com.project.Permission.of.lead.service.UserDetails.UserPrinciple;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,6 +40,9 @@ public class PersonalManagementController {
     @Autowired
     private PersonalRepository personalRepository;
 
+    @Autowired
+    private BussinessUnitService bussinessUnitService;
+
 
     private boolean hasRole(UserPrinciple userPrinciple, String role) {
         return userPrinciple.getAuthorities().stream()
@@ -59,6 +63,7 @@ public class PersonalManagementController {
                     .body("ACCESS DENIED ONLY FOR HR MANAGER,BUSSINESS ADMIN AND ENTERPRISE ADMIN ROLE");
         }
 
+
         List<PersonalManagementDto> personalManagementDtos = personalManagementService.getAllEmployee(eid);
         return ResponseEntity.ok(personalManagementDtos);
     }
@@ -73,10 +78,12 @@ public class PersonalManagementController {
 
         Users loggedInUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("ACCESS DENIED ONLY FOR BUSSINESS ADMIN");
         }
+
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
 
         List<PersonalManagementDto> getEmployee = personalManagementService.getEmployeeByEidAndBuid(loggedInUser, eid, buid);
         return ResponseEntity.ok(getEmployee);
@@ -163,7 +170,7 @@ public class PersonalManagementController {
                                                  @AuthenticationPrincipal UserPrinciple userPrinciple) {
 
         Users loggedUser=userPrinciple.getUser();
-        if (!hasRole(userPrinciple, "HR MANAGER")) {
+        if (!hasRole(userPrinciple, "HR MANAGER") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("ACCESS DENIED ONLY FOR HR MANAGER ROLE");
         }
@@ -189,6 +196,7 @@ public class PersonalManagementController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("ONLY HR MANAGER CAN ACCESS");
         }
 
+        bussinessUnitService.validBuAccess(userPrinciple, buid);
         PersonalManagementDto personalManagementDto = objectMapper.convertValue(requestBody, PersonalManagementDto.class);
         PersonalManagementDto assignBussinessunit = personalManagementService.asssignBussinessUnit(personalManagementDto, eid, empid, buid);
         return ResponseEntity.ok(assignBussinessunit);
@@ -210,7 +218,7 @@ public class PersonalManagementController {
                                                         @PathVariable String tid) {
 
             Users loggedInUser=userPrinciple.getUser();
-                if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER")) {
+                if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN)
                             .body("ACCESS DENIED ONLY FOR BUSSINESS ADMIN");
                 }
@@ -220,6 +228,7 @@ public class PersonalManagementController {
                 System.out.println(buid);
                 System.out.println(tid);
 
+                bussinessUnitService.validBuAccess(userPrinciple, buid);
                 List<PersonalManagementDto> getEmployee = personalManagementService.getEmployeeByEidAndBuidAndTid(loggedInUser, eid, buid, tid);
                 return ResponseEntity.ok(getEmployee);
 
@@ -276,11 +285,12 @@ public class PersonalManagementController {
 
         Users loggedUser = userPrinciple.getUser();
 
-        if (!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple, "BUSSINESS_ADMIN")) {
+        if (!hasRole(userPrinciple, "HR MANAGER") && !hasRole(userPrinciple, "BUSSINESS_ADMIN") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body("Only HR MANAGER can assign territories to employees");
         }
+
 
         List<String> territoriesIds = (List<String>) requestBody.get("territories");
 
@@ -327,7 +337,7 @@ public class PersonalManagementController {
                                                         @AuthenticationPrincipal UserPrinciple userPrinciple){
         Users loggedInUser=userPrinciple.getUser();
 
-        if(!hasRole(userPrinciple,"HR MANAGER")){
+        if(!hasRole(userPrinciple,"HR MANAGER") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")){
             return ResponseEntity.ok("only hr manager can get the assigned territories");
         }
 
@@ -359,6 +369,11 @@ public class PersonalManagementController {
     @PostMapping("/{eid}/bussinessunits/{buid}/assign/employee/role")
     public ResponseEntity<?>assignEmployeeRole(@RequestBody EmployeeRoleDto request,@AuthenticationPrincipal UserPrinciple userPrinciple,
                                                @PathVariable String eid,@PathVariable String buid){
+
+        if (!hasRole(userPrinciple, "BUSSINESS_ADMIN") && !hasRole(userPrinciple, "HR MANAGER") &&!hasRole(userPrinciple,"ENTERPRISE_ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("ACCESS DENIED ONLY FOR BUSSINESS ADMIN,ENTERPRISE ADMIN");
+        }
 
         String employeeId= request.getEmployeeId();
         List<Long> roleIds= request.getRoleId();

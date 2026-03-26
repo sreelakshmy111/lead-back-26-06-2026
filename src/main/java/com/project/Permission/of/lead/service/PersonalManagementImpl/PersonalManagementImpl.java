@@ -133,6 +133,14 @@ public class PersonalManagementImpl implements PersonalManagementService {
         person.setUpdated_by(loggedUser.getUid());
 
         personalRepository.save(person);
+
+
+        Users user=userRepository.findByEmail(personalDto.getEmail());
+
+        if(user !=null){
+            user.setEmail(personalDto.getEmail());
+            userRepository.save(user);
+        }
         return PearsonalMapper.maptoPersonalManagementDto(person);
     }
 

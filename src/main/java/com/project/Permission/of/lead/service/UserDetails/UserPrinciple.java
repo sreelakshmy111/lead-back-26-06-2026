@@ -1,5 +1,6 @@
 package com.project.Permission.of.lead.service.UserDetails;
 
+import com.project.Permission.of.lead.entity.Roles;
 import com.project.Permission.of.lead.entity.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Transactional
@@ -28,21 +30,48 @@ public class UserPrinciple implements UserDetails {
 
 
         // Add roles as authorities (with ROLE_ prefix)
-        List<GrantedAuthority> roles = user1.getUserRoles().stream()
-                .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.getRole().getRoleName()))
-                .collect(Collectors.toList());
+//        List<GrantedAuthority> roles = user1.getUserRoles().stream()
+//                .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.getRole().getRoleName()))
+//                .collect(Collectors.toList());
+//
+//        // Optionally, add permissions too
+//        List<GrantedAuthority> permissions = user1.getUserRoles().stream()
+//                .flatMap(userRole -> userRole.getRole().getRolePermissions().stream())
+//                .map(rolePermission -> new SimpleGrantedAuthority(rolePermission.getPermission().getCode().toUpperCase()))
+//                .collect(Collectors.toList());
+//
+//        roles.addAll(permissions); // merge roles and permissions
+//
+//
+//        return roles;
 
-        // Optionally, add permissions too
-        List<GrantedAuthority> permissions = user1.getUserRoles().stream()
-                .flatMap(userRole -> userRole.getRole().getRolePermissions().stream())
-                .map(rolePermission -> new SimpleGrantedAuthority(rolePermission.getPermission().getCode().toUpperCase()))
-                .collect(Collectors.toList());
-
-        roles.addAll(permissions); // merge roles and permissions
 
 
-        return roles;
+        return user1.getUserRoles().stream()
+                .flatMap(userRole -> {
 
+                    Roles role = userRole.getRole();
+
+                    // ✅ Null safety (important since no FK)
+                    if (role == null) {
+                        return Stream.empty();
+                    }
+
+                    // ✅ ROLE authority
+                    Stream<GrantedAuthority> roleStream =
+                            Stream.of(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
+
+                    // ✅ PERMISSION authorities
+                    Stream<GrantedAuthority> permissionStream =
+                            role.getRolePermissions().stream()
+                                    .filter(rp -> rp.getPermission() != null)
+                                    .map(rp -> new SimpleGrantedAuthority(
+                                            rp.getPermission().getCode().toUpperCase()
+                                    ));
+
+                    return Stream.concat(roleStream, permissionStream);
+                })
+                .collect(Collectors.toSet()); // ✅ removes duplicates
 
     }
 //        return user1.getUserRoles().stream()                   // fetch all user roles
@@ -100,13 +129,21 @@ public class UserPrinciple implements UserDetails {
 //                .map((userRole -> userRole.getRole().getRoleName()))
 //                .orElse(null);
 //    }
-public List<String> getRoles() {
+//public List<String> getRoles() {
+//
+//    return user1.getUserRoles()
+//            .stream()
+//            .map(userRole -> userRole.getRole().getRoleName())
+//            .collect(Collectors.toList());
+//}
 
-    return user1.getUserRoles()
-            .stream()
-            .map(userRole -> userRole.getRole().getRoleName())
-            .collect(Collectors.toList());
-}
+    public List<String> getRoles() {
+        return user1.getUserRoles().stream()
+                .map(userRole -> userRole.getRole())
+                .filter(role -> role != null)
+                .map(Roles::getRoleName)
+                .collect(Collectors.toList());
+    }
 
 
 

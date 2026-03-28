@@ -139,7 +139,7 @@ private UserRepository userRepository;
                 .findByRoleName("ENTERPRISE_ADMIN")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        UserRole userRole = new UserRole(createdUser, role);
+        UserRole userRole = new UserRole(createdUser.getUid(), role.getRoleId());
         userRolerepository.save(userRole);
 
 
@@ -147,8 +147,8 @@ private UserRepository userRepository;
 
         EmployeeDraft employeeDraft =
                 EmployeeDraftMapper.maptoEmployeeDraft(
-                        employeeDraftDto,
-                        createdUser.getUid()
+                        employeeDraftDto
+
                 );
 
 //        employeeDraft.setCreatedBy(usr_id);

@@ -86,6 +86,7 @@ public class CustomerController {
             bussinessUnitService.validBuAccess(userPrinciple, buid);
             CustomerDto customerDto=objectMapper.convertValue(requestBody,CustomerDto.class);
             CustomerDto createdCustomer=customerService.createCustomer(customerDto,eid,buid,loggedInUser);
+//      CustomerDto createdCustomer=customerService.createCustomer1(customerDto,eid,buid,loggedInUser);
             return ResponseEntity.ok(createdCustomer);
         }
 

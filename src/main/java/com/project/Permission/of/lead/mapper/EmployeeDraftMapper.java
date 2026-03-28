@@ -2,14 +2,13 @@ package com.project.Permission.of.lead.mapper;
 
 import com.project.Permission.of.lead.dto.EmployeeDraftDto;
 import com.project.Permission.of.lead.entity.EmployeeDraft;
-import com.project.Permission.of.lead.entity.Users;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class EmployeeDraftMapper {
 
-    public static EmployeeDraft maptoEmployeeDraft(EmployeeDraftDto employeeDraftDto, String loggedInUser) {
+    public static EmployeeDraft maptoEmployeeDraft(EmployeeDraftDto employeeDraftDto) {
         LocalDateTime now=LocalDateTime.now();
         return new EmployeeDraft(
                 employeeDraftDto.getId(),
@@ -32,7 +31,7 @@ public class EmployeeDraftMapper {
                         : new ArrayList<>(),
                 employeeDraftDto.isActive(),
                 employeeDraftDto.getCreatedAt() !=null? employeeDraftDto.getCreatedAt():now,
-                loggedInUser,
+                employeeDraftDto.getCreatedBy(),
                 employeeDraftDto.getUpdatedAt(),
                 employeeDraftDto.getUpdatedBy(),
                 employeeDraftDto.getAddressId()

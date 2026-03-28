@@ -11,4 +11,6 @@ public interface CustomerService {
     List<CustomerDto> getCustomers(Users loggedInUser, String eid, String buid);
 
     CustomerDto updateContact(CustomerDto customerDto, Users loggedUser, String eid, String buid, String cuid);
+
+//    CustomerDto createCustomer1(CustomerDto , String , String , Users );
 }

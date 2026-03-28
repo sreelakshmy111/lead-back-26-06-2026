@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
                 .findByRoleName("ENTERPRISE_ADMIN")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        UserRole userRole = new UserRole(createdUser, role);
+        UserRole userRole = new UserRole(createdUser.getUid(), role.getRoleId());
 
 
 
@@ -253,12 +253,22 @@ public LoginResponseDto verify(UserDto userDto) {
 
 //    List<String> roles;
 
-    List<String> roles = null;
-    if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
-        roles = user.getUserRoles().stream().map(userRole -> userRole.getRole().getRoleName()).toList();
+//    List<String> roles = null;
+//    if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
+//        roles = user.getUserRoles().stream().map(userRole -> userRole.getRole().getRoleName()).toList();
+//
+//
+//    }
 
+    List<Long> roleIds = userRolerepository.findByUid(user.getUid())
+            .stream()
+            .map(UserRole::getRoleId)
+            .toList();
 
-    }
+    List<String> roles = roleRepo.findAllById(roleIds)
+            .stream()
+            .map(Roles::getRoleName)
+            .toList();
 
 
 //    String roleName = user.getUserRoles()

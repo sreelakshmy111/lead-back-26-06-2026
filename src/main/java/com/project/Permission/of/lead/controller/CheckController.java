@@ -32,6 +32,9 @@ public class CheckController {
     @RequestMapping("/check/status")
     public ResponseEntity<CheckUpDto> checkStatus(@AuthenticationPrincipal UserPrinciple userPrinciple){
 
+        if (userPrinciple == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         if (!hasRole(userPrinciple, "BUSSINESS_ADMIN" ) && !hasRole(userPrinciple, "ENTERPRISE_ADMIN" ) && !hasRole(userPrinciple, "LEAD_ANALYST") && !hasRole(userPrinciple, "HR MANAGER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

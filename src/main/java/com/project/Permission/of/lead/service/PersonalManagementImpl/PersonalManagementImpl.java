@@ -455,7 +455,7 @@ public class PersonalManagementImpl implements PersonalManagementService {
             Roles role = roleRepository.findById(roleId)
                     .orElseThrow(() -> new RuntimeException("Role not found"));
 
-            UserRole ur = new UserRole(user, role);
+            UserRole ur = new UserRole(user.getUid(), role.getRoleId());
             userRolerepository.save(ur);
         }
 

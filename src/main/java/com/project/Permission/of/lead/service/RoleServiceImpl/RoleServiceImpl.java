@@ -78,7 +78,7 @@ public class RoleServiceImpl implements RoleService {
         Users user = userRepository.findByEmail(p.getEmail());
 
 
-        List<UserRole> userRoles = userRolerepository.findByUser(user);
+        List<UserRole> userRoles = userRolerepository.findByUid(user.getUid());
 
 
 
@@ -121,7 +121,8 @@ public class RoleServiceImpl implements RoleService {
             Roles role = roleRepo.findById(roleId)
                     .orElseThrow(() -> new RuntimeException("ROLE NOT FOUND"));
 
-            userRolerepository.deleteRoles(user, roleIds);
+//            userRolerepository.deleteRoles(user, roleIds);
+            userRolerepository.deleteRoles(user.getUid(), roleIds);
         }
 
 

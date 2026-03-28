@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 
 
@@ -39,7 +39,9 @@ public class Users {
     private String email;
 
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch =  FetchType.EAGER)
+    @JoinColumn(name = "uid", referencedColumnName = "uid")
     private Set<UserRole> userRoles = new HashSet<>();
 
 

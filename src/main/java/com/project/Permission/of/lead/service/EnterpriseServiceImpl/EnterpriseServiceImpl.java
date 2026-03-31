@@ -2,10 +2,7 @@ package com.project.Permission.of.lead.service.EnterpriseServiceImpl;
 
 import com.project.Permission.of.lead.dto.CheckUpDto;
 import com.project.Permission.of.lead.dto.EnterpriseDto;
-import com.project.Permission.of.lead.entity.BussinessUnit;
-import com.project.Permission.of.lead.entity.Enterprise;
-import com.project.Permission.of.lead.entity.PersonalManagement;
-import com.project.Permission.of.lead.entity.Users;
+import com.project.Permission.of.lead.entity.*;
 import com.project.Permission.of.lead.mapper.EnterpriseMapper;
 import com.project.Permission.of.lead.repository.*;
 import com.project.Permission.of.lead.service.EmployeeDraftService;
@@ -51,6 +48,10 @@ private PersonalManagementService personalManagementService;
 
 @Autowired
 private EmployeeDraftService employeeDraftService;
+
+
+@Autowired
+private EmployeeDraftRepository employeeDraftRepository;
 
 @Autowired
 private PersonalRepository personalRepository;
@@ -117,7 +118,7 @@ private TeritoryRepoitory teritoryRepoitory;
 
 
         // calling move the data from employee draft table to employee table method....
-        employeeDraftService.moveEmployeeDraft(loggedInUser.getUid(),eid);
+        employeeDraftService.moveEmployeeDraft(loggedInUser.getEmail(),eid);
 
 
         // 6️⃣ Map Entity → DTO and return
@@ -196,51 +197,48 @@ private TeritoryRepoitory teritoryRepoitory;
         // get employee using email
 
         Users u=userRepo.findByEmail(loggedInUser.getEmail());
+
         if(u==null){
-
+            throw new RuntimeException("User not found");
         }
-        PersonalManagement employee =
-                personalRepository.findByEmail(loggedInUser.getEmail()).orElseThrow(()-> new RuntimeException("Employee not found"));
+//        EmployeeDraft employee =
+//                employeeDraftRepository.findByEmail(loggedInUser.getEmail()).orElseThrow(()-> new RuntimeException("Employee draft person not found"));
 
-        System.out.println("logged in user details" + employee);
+//        EmployeeDraft draft = employeeDraftRepository.findByEmail(loggedInUser.getEmail()).orElse(null);
+//
+//
+//
+//        if (draft != null) {
+//            return new CheckUpDto(false, false);
+//        }
 
-        boolean enterpriseCreate = false;
+        // 🔥 Check personal table
+        PersonalManagement personal = personalRepository.findByEmail(loggedInUser.getEmail())
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        String eid = personal.getEid();
+
+        System.out.println("EMAIL: " + loggedInUser.getEmail());
+        System.out.println("EID from personal: [" + eid + "]");
+        System.out.println("Exists in enterprise: " + enterpriseRepo.existsByEid(eid));
+
+        // ✅ Safe check
+        if (eid == null || eid.isBlank()) {
+            return new CheckUpDto(false, false);
+        }
+
+        boolean enterpriseCreate = enterpriseRepo.existsByEid(eid);
+
         boolean bussinessCreate = false;
-        boolean regionCreate = false;
 
-        if(employee != null){
+        if (enterpriseCreate) {
+            List<BussinessUnit> buList =
+                    bussinessUnitRepository.findByEnterpriseId(eid);
 
-            // check enterprise
-            Enterprise enterprise =
-                    enterpriseRepo.findByEid(employee.getEid()).orElseThrow((()-> new RuntimeException("enterprise not found")));
-
-            enterpriseCreate = enterprise != null;
-
-            if(enterpriseCreate){
-
-                List<BussinessUnit> buList =
-                        bussinessUnitRepository.findByEnterpriseId(enterprise.getEid());
-
-                bussinessCreate = buList != null && !buList.isEmpty();
-
-                if(bussinessCreate){
-
-                    for(BussinessUnit bu : buList){
-
-                        if(teritoryRepoitory.existsByBussinessUnitId(bu.getBuid())){
-                            regionCreate = true;
-                            break;
-                        }
-
-                    }
-
-                }
-
-            }
-
+            bussinessCreate = buList != null && !buList.isEmpty();
         }
 
-        return new CheckUpDto(enterpriseCreate,bussinessCreate,regionCreate);
+        return new CheckUpDto(enterpriseCreate, bussinessCreate);
 
     }
 

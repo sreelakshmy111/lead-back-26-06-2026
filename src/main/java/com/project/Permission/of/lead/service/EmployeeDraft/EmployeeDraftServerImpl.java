@@ -192,28 +192,35 @@ private UserRepository userRepository;
 
     ///  move the meployee_draft table data to employee table....................
     @Override
-    public void moveEmployeeDraft(String createdBy, String eid) {
-        EmployeeDraft e=employeeDraftRepository.findByCreatedBy(createdBy);
-        System.out.println("employe draft details"+e);
+    public void moveEmployeeDraft(String email, String eid) {
 
-        PersonalManagement p=new PersonalManagement();
-        p.setFirstName(e.getFirstName());
-        p.setMiddleName(e.getMiddleName());
-        p.setLastName(e.getLastName());
-        p.setGender(e.getGender());
-        p.setDob(e.getDob());
-        p.setIsdCode(e.getIsdCode());
-        p.setPhone(e.getPhone());
-        p.setEmail(e.getEmail());
-        p.setQualification(e.getQualification());
-        p.setExperience(e.getExperience());
-        p.setActive(e.isActive());
-        p.setEid(eid);
-        p.setCreatedBy(e.getCreatedBy());
-        p.setCreated_at(e.getCreated_at());
-        p.setAddressId(e.getAddressId());
+        EmployeeDraft draft = employeeDraftRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Employee draft not found"));
 
-         personalRepository.save(p);
+            PersonalManagement p = new PersonalManagement();
+
+            // 🔹 Map fields
+            p.setFirstName(draft.getFirstName());
+            p.setMiddleName(draft.getMiddleName());
+            p.setLastName(draft.getLastName());
+            p.setGender(draft.getGender());
+            p.setDob(draft.getDob());
+            p.setIsdCode(draft.getIsdCode());
+            p.setPhone(draft.getPhone());
+            p.setEmail(draft.getEmail());
+            p.setQualification(draft.getQualification());
+            p.setExperience(draft.getExperience());
+            p.setActive(draft.isActive());
+            p.setEid(eid);
+            p.setCreatedBy(draft.getCreatedBy());
+            p.setCreated_at(draft.getCreated_at());
+            p.setAddressId(draft.getAddressId());
+
+            // ✅ Step 1: Save to final table
+            personalRepository.save(p);
+
+            // ✅ Step 2: Delete from draft (THIS makes it MOVE)
+            employeeDraftRepository.delete(draft);
 
     }
 

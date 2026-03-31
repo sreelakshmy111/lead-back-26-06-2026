@@ -11,5 +11,5 @@ public class CheckUpDto {
 
     private boolean enterpriseCreate;
     private boolean bussinessUnitCreate;
-    private  boolean regionCreate;
+
 }

@@ -21,6 +21,8 @@ public interface EnterpriseRepostory extends JpaRepository<Enterprise,Long> {
 
     Enterprise findByCreatedBy(String userId);
 
+    boolean existsByEid(String eid);
+
 //    List<Enterprise> findAllById(List<String> enterpriseIds);
 
 //    List<Enterprise> findAllByEid(List<String> enterpriseIds);

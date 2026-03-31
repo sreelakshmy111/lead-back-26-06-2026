@@ -113,9 +113,10 @@ public class AddressServiceImpl implements AddressService {
                         orElseThrow(()-> new RuntimeException("Personal Details not found"));
 
                 employeeDraft.setAddressId(addressId);
-                Users user=userRepository.findByUid(employeeDraft.getCreatedBy()).
-                        orElseThrow(()-> new RuntimeException("user not found"));
-                user.setAddressId(addressId);
+//                Users user=userRepository.findByUid(employeeDraft.getEmail()).
+//                        orElseThrow(()-> new RuntimeException("created user not found"));
+//                user.setAddressId(addressId);
+                employeeDraft.setAddressId(addressId);
                 employeeDraftRepository.save(employeeDraft);
 
                 return "Address linked to Employee Sucessfully";
